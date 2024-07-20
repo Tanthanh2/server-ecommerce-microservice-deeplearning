@@ -1,0 +1,309 @@
+
+services:
+
+  discovery-server:
+    container_name: discovery-server
+    build:
+      context: ./Discovery-Server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    volumes:
+      - ./Discovery-Server:/app:rw
+    networks:
+      - microservices-network
+
+
+  api-gateway:
+    container_name: api-gateway
+    build: 
+      context: ./Gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8222:8222"
+    volumes:
+      - ./Gateway:/app:rw
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+
+      - discovery-server
+
+  
+  user-service:
+    container_name: user-service
+    build: 
+      context: ./User-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./User-Service:/app:rw
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+
+      - discovery-server
+      - api-gateway
+      - user-mysql
+
+
+  product-service:
+    container_name: product-service
+    build: 
+      context: ./Product-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./Product-Service:/app:rw
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+
+      - discovery-server
+      - api-gateway
+      - product-mysql
+
+
+  promotion-service:
+    container_name: promotion-service
+    build: 
+      context: ./Promotion-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./Promotion-Service:/app:rw
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+
+      - discovery-server
+      - api-gateway
+      - promotion-mysql
+
+  cart-service:
+    container_name: cart-service
+    build: 
+      context: ./Cart-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./Cart-Service:/app:rw
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+
+      - discovery-server
+      - api-gateway
+      - cart-mysql
+
+  order-service:
+    container_name: order-service
+    build: 
+      context: ./Order-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./Order-Service:/app:rw
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+
+      - discovery-server
+      - api-gateway
+      - order-mysql
+
+  payment-service:
+    container_name: payment-service
+    build: 
+      context: ./Payment-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./Payment-Service:/app:rw
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+
+      - discovery-server
+      - api-gateway
+      - payment-mysql
+
+  shipping-service:
+    container_name: shipping-service
+    build: 
+      context: ./Shipping-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    volumes:
+      - ./Shipping-Service:/app:rw
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+
+      - discovery-server
+      - api-gateway
+      - shipping-mysql
+  
+  notification-service:
+    container_name: notification-service
+    build:
+      context: ./Notification-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+    networks:
+      - microservices-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://localhost:8761/eureka
+    depends_on:
+      - discovery-server
+
+  user-mysql:
+    image: mysql:latest
+    container_name: user-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: userdb
+    ports:
+      - "3301:3306"
+    volumes:
+      - user-mysql-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+  product-mysql:
+    image: mysql:latest
+    container_name: product-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: productdb
+    ports:
+      - "3302:3306"
+    volumes:
+      - product-mysql-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+  promotion-mysql:
+    image: mysql:latest
+    container_name: promotion-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: promotiondb
+    ports:
+      - "3303:3306"
+    volumes:
+      - promotion-mysql-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+  cart-mysql:
+    image: mysql:latest
+    container_name: cart-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: cartdb
+    ports:
+      - "3304:3306"
+    volumes:
+      - cart-mysql-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+  order-mysql:
+    image: mysql:latest
+    container_name: order-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: orderdb
+    ports:
+      - "3305:3306"
+    volumes:
+      - order-mysql-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+  payment-mysql:
+    image: mysql:latest
+    container_name: payment-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: paymentdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - payment-mysql-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+  shipping-mysql:
+    image: mysql:latest
+    container_name: shipping-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: shippingdb
+    ports:
+      - "3307:3306"
+    volumes:
+      - shipping-mysql-data:/var/lib/mysql
+    networks:
+      - microservices-network
+
+volumes:
+  user-mysql-data:
+  product-mysql-data:
+  promotion-mysql-data:
+  cart-mysql-data:
+  order-mysql-data:
+  payment-mysql-data:
+  shipping-mysql-data:
+
+networks:
+  microservices-network:
+    external: true
