@@ -1,0 +1,80 @@
+
+services:
+
+  discovery-server:
+    container_name: discovery-server
+    build:
+      context: ./Discovery-Server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    volumes:
+      - ./Discovery-Server:/app:rw
+    networks:
+      - microservices-network
+
+
+  api-gateway:
+    container_name: api-gateway
+    build: 
+      context: ./Gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8222:8222"
+    volumes:
+      - ./Gateway:/app:rw
+    networks:
+      - microservices-network
+    links:
+      - discovery-server
+    depends_on:
+      - discovery-server
+    deploy:
+        resources:
+                limits:
+                        cpus: '0.50'
+                        memory: 512M
+
+  user-service:
+    container_name: user-service
+    build: 
+      context: ./User-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./User-Service:/app:rw
+    networks:
+      - microservices-network
+    links:
+      - discovery-server
+      - api-gateway
+      - user-mysql
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - user-mysql
+    deploy:
+        resources:
+                limits:
+                        cpus: '0.50'
+                        memory: 512M
+
+  user-mysql:
+    image: mysql:latest
+    container_name: user-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: userdb
+    ports:
+      - "3301:3306"
+    networks:
+      - microservices-network
+
+
+
+networks:
+  microservices-network:
+    external: true

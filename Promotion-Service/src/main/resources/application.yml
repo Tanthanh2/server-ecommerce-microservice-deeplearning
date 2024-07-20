@@ -1,0 +1,30 @@
+eureka:
+  instance:
+    hostname: promotion-service
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+server:
+  port: 8083
+spring:
+  application:
+    name: Promotion-Service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://promotion-mysql:3306/promotiondb
+    username: root
+    password: Abc@123456789
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+application:
+  config:
+    promotions-url: http://localhost:8222/api/v1/promotions
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
