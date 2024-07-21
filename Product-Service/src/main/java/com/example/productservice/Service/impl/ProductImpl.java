@@ -20,20 +20,12 @@ import java.util.Optional;
 public class ProductImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final ProductMapper productMapper = ProductMapper.INSTANCE;
+
     @Override
     public Product addProduct(ProductRequest productRequest) {
-        Product product = productMapper.toEntity(productRequest);
         Category category = categoryRepository.findById(productRequest.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
-        product.setCategory(category);
-        if(productRequest.getSizeQuantities() != null ){
-            int quantity = 0;
-            for (SizeQuantityRequest sizeQuantity: productRequest.getSizeQuantities()){
-                quantity += sizeQuantity.getQuantity();
-            }
-            product.setQuantity(quantity);
-        }
+        Product product = ProductMapper.toEntity(productRequest, category);
         return productRepository.save(product);
     }
 

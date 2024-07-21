@@ -16,7 +16,7 @@ import java.util.List;
 public class Promotion {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long _id;
+    private Long id;
 
     private String name;
     private Date startDate;

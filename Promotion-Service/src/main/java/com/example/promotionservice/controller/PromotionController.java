@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class PromotionController {
     @GetMapping("/test")
     public String testApi() {
-        return "products Service API is working!";
+        return "promotions Service API is working!";
     }
 }
