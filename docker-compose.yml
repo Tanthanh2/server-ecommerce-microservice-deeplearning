@@ -3,6 +3,7 @@ services:
 
   discovery-server:
     container_name: discovery-server
+    image: nguyentanthanh0709/discovery-server:latest
     build:
       context: ./Discovery-Server
       dockerfile: Dockerfile
@@ -13,9 +14,9 @@ services:
     networks:
       - microservices-network
 
-
   api-gateway:
     container_name: api-gateway
+    image: nguyentanthanh0709/api-gateway:latest
     build: 
       context: ./Gateway
       dockerfile: Dockerfile
@@ -37,6 +38,7 @@ services:
 
   user-service:
     container_name: user-service
+    image: nguyentanthanh0709/user-service:latest
     build: 
       context: ./User-Service
       dockerfile: Dockerfile
@@ -60,8 +62,164 @@ services:
                         cpus: '0.50'
                         memory: 512M
 
+  product-service:
+    container_name: product-service
+    image: nguyentanthanh0709/product-service:latest
+    build: 
+      context: ./Product-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./Product-Service:/app:rw
+    networks:
+      - microservices-network
+    links:
+      - discovery-server
+      - api-gateway
+      - product-mysql
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - product-mysql
+    deploy:
+        resources:
+                limits:
+                        cpus: '0.50'
+                        memory: 512M
+
+  promotion-service:
+    container_name: promotion-service
+    image: nguyentanthanh0709/promotion-service:latest
+    build: 
+      context: ./Promotion-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./Promotion-Service:/app:rw
+    networks:
+      - microservices-network
+    links:
+      - discovery-server
+      - api-gateway
+      - promotion-mysql
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - promotion-mysql
+    deploy:
+        resources:
+                limits:
+                        cpus: '0.50'
+                        memory: 512M
+
+  cart-service:
+    container_name: cart-service
+    image: nguyentanthanh0709/cart-service:latest
+    build: 
+      context: ./Cart-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./Cart-Service:/app:rw
+    networks:
+      - microservices-network
+    links:
+      - discovery-server
+      - api-gateway
+      - cart-mysql
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - cart-mysql
+    deploy:
+        resources:
+                limits:
+                        cpus: '0.50'
+                        memory: 512M
+
+  order-service:
+    container_name: order-service
+    image: nguyentanthanh0709/order-service:latest
+    build: 
+      context: ./Order-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    volumes:
+      - ./Order-Service:/app:rw
+    networks:
+      - microservices-network
+    links:
+      - discovery-server
+      - api-gateway
+      - order-mysql
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - order-mysql
+    deploy:
+        resources:
+                limits:
+                        cpus: '0.50'
+                        memory: 512M
+
+  payment-service:
+    container_name: payment-service
+    image: nguyentanthanh0709/payment-service:latest
+    build: 
+      context: ./Payment-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    volumes:
+      - ./Payment-Service:/app:rw
+    networks:
+      - microservices-network
+    links:
+      - discovery-server
+      - api-gateway
+      - payment-mysql
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - payment-mysql
+    deploy:
+        resources:
+                limits:
+                        cpus: '0.50'
+                        memory: 512M
+
+  shipping-service:
+    container_name: shipping-service
+    image: nguyentanthanh0709/shipping-service:latest
+    build: 
+      context: ./Shipping-Service
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    volumes:
+      - ./Shipping-Service:/app:rw
+    networks:
+      - microservices-network
+    links:
+      - discovery-server
+      - api-gateway
+      - shipping-mysql
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - shipping-mysql
+    deploy:
+        resources:
+                limits:
+                        cpus: '0.50'
+                        memory: 512M
+
   user-mysql:
-    image: mysql:latest
+    image: nguyentanthanh0709/mysql:userdb
     container_name: user-mysql
     environment:
       MYSQL_USER: thanhntt
@@ -73,7 +231,83 @@ services:
     networks:
       - microservices-network
 
+  product-mysql:
+    image: nguyentanthanh0709/mysql:productdb
+    container_name: product-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: productdb
+    ports:
+      - "3302:3306"
+    networks:
+      - microservices-network
 
+  promotion-mysql:
+    image: nguyentanthanh0709/mysql:promotiondb
+    container_name: promotion-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: promotiondb
+    ports:
+      - "3303:3306"
+    networks:
+      - microservices-network
+
+  cart-mysql:
+    image: nguyentanthanh0709/mysql:cartdb
+    container_name: cart-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: cartdb
+    ports:
+      - "3304:3306"
+    networks:
+      - microservices-network
+
+  order-mysql:
+    image: nguyentanthanh0709/mysql:orderdb
+    container_name: order-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: orderdb
+    ports:
+      - "3305:3306"
+    networks:
+      - microservices-network
+
+  payment-mysql:
+    image: nguyentanthanh0709/mysql:paymentdb
+    container_name: payment-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: paymentdb
+    ports:
+      - "3306:3306"
+    networks:
+      - microservices-network
+
+  shipping-mysql:
+    image: nguyentanthanh0709/mysql:shippingdb
+    container_name: shipping-mysql
+    environment:
+      MYSQL_USER: thanhntt
+      MYSQL_PASSWORD: Abc@123456789
+      MYSQL_ROOT_PASSWORD: Abc@123456789
+      MYSQL_DATABASE: shippingdb
+    ports:
+      - "3307:3306"
+    networks:
+      - microservices-network
 
 networks:
   microservices-network:

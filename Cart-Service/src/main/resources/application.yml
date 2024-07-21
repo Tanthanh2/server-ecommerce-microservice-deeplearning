@@ -3,40 +3,12 @@ eureka:
     hostname: cart-service
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://discovery-server:8761/eureka/
 server:
   port: 8084
 spring:
   application:
     name: Cart-Service
-    cloud:
-    loadbalancer:
-      #      clients:
-      #        fraud-verifier:
-      #          configurations: default
-      #          retry:
-      #            avoid-previous-instance: false
-      #      configurations: health-check
-      retry:
-        enabled: true
-        retryable-status-codes: 503,404
-        avoid-previous-instance: true
-      ribbon:
-        enabled: false
-      zone: test
-      sticky-session:
-        add-service-instance-cookie: true
-        instance-id-cookie-name:
-      hint:
-        default: test
-      hint-header-name: X-Test
-      health-check:
-        refetch-instances: true
-  #      cache:
-  #        ttl: 60m
-  #        enabled: false
-  #        caffeine:
-  #          spec: maximumSize=200,expireAfterWrite=300s
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://cart-mysql:3306/cartdb

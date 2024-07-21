@@ -22,6 +22,55 @@ spring:
             - Path=/api/v1/users/**
           filters:
             - AuthenticationFilter
+
+        - id: products
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/api/v1/products/**
+          filters:
+            - AuthenticationFilter
+
+        - id: promotions
+          uri: lb://PROMOTION-SERVICE
+          predicates:
+            - Path=/api/v1/promotions/**
+          filters:
+            - AuthenticationFilter
+
+        - id: carts
+          uri: lb://CART-SERVICE
+          predicates:
+            - Path=/api/v1/carts/**
+          filters:
+            - AuthenticationFilter
+
+        - id: orders
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/v1/orders/**
+          filters:
+            - AuthenticationFilter
+
+        - id: payments
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/api/v1/payments/**
+          filters:
+            - AuthenticationFilter
+
+        - id: shippings
+          uri: lb://SHIPPING-SERVICE
+          predicates:
+            - Path=/api/v1/shippings/**
+          filters:
+            - AuthenticationFilter
+
+        - id: notifications
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/v1/notifications/**
+          filters:
+            - AuthenticationFilter
 management:
   tracing:
     sampling:

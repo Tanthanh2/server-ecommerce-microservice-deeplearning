@@ -6,8 +6,7 @@ const app = express();
 
 
 
-app.use("/api/v1/notification", routes);
-
+app.use("/api/v1/notifications", routes);
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,7 @@ public class Product {
     private int quantity;
     private int sold = 0;
     private int view = 0;
-    private int order = 0;
+    private int orderNumber = 0;
     private String name;
     private String description;
     private String shortDescription;
@@ -34,8 +35,10 @@ public class Product {
     @JsonIgnore
     private Category category;
     private String image;
-    private String createdAt;
-    private String updatedAt;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
     private Long idShop;
     private boolean isPublic = true;
 
@@ -46,4 +49,14 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SizeQuantity> sizeQuantities; // Cho phép null
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

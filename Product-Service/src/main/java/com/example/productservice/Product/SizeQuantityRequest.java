@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class SizeQuantityRequest {
+    private Long id;
     private String size;
+    private String color;
     private int quantity;
 }
