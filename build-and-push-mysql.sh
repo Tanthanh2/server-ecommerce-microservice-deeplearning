@@ -7,11 +7,8 @@ USERNAME="nguyentanthanh0709"
 declare -A MYSQL_IMAGES=(
     ["userdb"]="3301"
     ["productdb"]="3302"
-    ["promotiondb"]="3303"
-    ["cartdb"]="3304"
-    ["orderdb"]="3305"
-    ["paymentdb"]="3306"
-    ["shippingdb"]="3307"
+    ["cartdb"]="3303"
+    ["purchasedb"]="3304"
 )
 
 # Loop through each MySQL image and push it to Docker Hub

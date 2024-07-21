@@ -1,17 +1,17 @@
 eureka:
   instance:
-    hostname: cart-service
+    hostname: purchase-service
   client:
     service-url:
       defaultZone: http://discovery-server:8761/eureka/
 server:
-  port: 8083
+  port: 8084
 spring:
   application:
-    name: Cart-Service
+    name: Purchase-Service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://cart-mysql:3306/cartdb
+    url: jdbc:mysql://purchase-mysql:3306/purchasedb
     username: root
     password: Abc@123456789
   jpa:
@@ -22,7 +22,7 @@ spring:
 
 application:
   config:
-    carts-url: http://localhost:8222/api/v1/carts
+    purchases-url: http://localhost:8222/api/v1/purchases
 
 management:
   tracing:

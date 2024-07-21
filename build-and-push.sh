@@ -7,11 +7,10 @@ services=(
   ["api-gateway"]="Gateway"
   ["user-service"]="User-Service"
   ["product-service"]="Product-Service"
-  ["promotion-service"]="Promotion-Service"
   ["cart-service"]="Cart-Service"
-  ["payment-service"]="Payment-Service"
-  ["order-service"]="Order-Service"
-  ["shipping-service"]="Shipping-Service"
+  ["purchase-service"]="Purchase-Service"
+  ["notification-service"]="Notification-Service"
+
 
 )
 
