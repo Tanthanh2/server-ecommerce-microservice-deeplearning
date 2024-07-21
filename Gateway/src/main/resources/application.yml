@@ -30,12 +30,6 @@ spring:
           filters:
             - AuthenticationFilter
 
-        - id: promotions
-          uri: lb://PROMOTION-SERVICE
-          predicates:
-            - Path=/api/v1/promotions/**
-          filters:
-            - AuthenticationFilter
 
         - id: carts
           uri: lb://CART-SERVICE
@@ -44,24 +38,10 @@ spring:
           filters:
             - AuthenticationFilter
 
-        - id: orders
-          uri: lb://ORDER-SERVICE
+        - id: purchases
+          uri: lb://PURCHASE-SERVICE
           predicates:
-            - Path=/api/v1/orders/**
-          filters:
-            - AuthenticationFilter
-
-        - id: payments
-          uri: lb://PAYMENT-SERVICE
-          predicates:
-            - Path=/api/v1/payments/**
-          filters:
-            - AuthenticationFilter
-
-        - id: shippings
-          uri: lb://SHIPPING-SERVICE
-          predicates:
-            - Path=/api/v1/shippings/**
+            - Path=/api/v1/purchases/**
           filters:
             - AuthenticationFilter
 

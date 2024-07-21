@@ -32,7 +32,6 @@ public class Product {
     private String shortDescription;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    @JsonIgnore
     private Category category;
     private String image;
     @Column(nullable = false, updatable = false)
