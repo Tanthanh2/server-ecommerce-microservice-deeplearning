@@ -1,0 +1,36 @@
+eureka:
+  instance:
+    hostname: product-service
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+server:
+  port: 8082
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  application:
+    name: Product-Service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://product-mysql:3306/productdb
+    username: root
+    password: Abc@123456789
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+application:
+  config:
+    products-url: http://localhost:8222/api/v1/products
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

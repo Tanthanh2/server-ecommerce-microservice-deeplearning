@@ -1,11 +1,11 @@
 package com.example.userservice.auth;
 
-import com.example.userservice.User.UserDTO;
-import com.example.userservice.Entity.User;
-import com.example.userservice.config.JwtService;
-import com.example.userservice.repositoty.UserRepository;
 import com.example.userservice.Entity.Token;
+import com.example.userservice.Entity.User;
+import com.example.userservice.User.UserDTO;
+import com.example.userservice.config.JwtService;
 import com.example.userservice.repositoty.TokenRepository;
+import com.example.userservice.repositoty.UserRepository;
 import com.example.userservice.token.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

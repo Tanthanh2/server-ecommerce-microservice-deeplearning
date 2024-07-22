@@ -1,8 +1,8 @@
 package com.example.userservice.service.Impl;
 
-import com.example.userservice.User.ShopDTO;
 import com.example.userservice.Entity.Shop;
 import com.example.userservice.Entity.User;
+import com.example.userservice.User.ShopDTO;
 import com.example.userservice.repositoty.ShopRepository;
 import com.example.userservice.repositoty.UserRepository;
 import com.example.userservice.service.ShopService;
