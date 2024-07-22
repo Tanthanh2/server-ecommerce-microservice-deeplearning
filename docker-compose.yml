@@ -39,7 +39,7 @@ services:
   user-service:
     container_name: user-service
     image: nguyentanthanh0709/user-service:latest
-    build: 
+    build:
       context: ./User-Service
       dockerfile: Dockerfile
     ports:

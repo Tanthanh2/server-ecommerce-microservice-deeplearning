@@ -1,7 +1,7 @@
 package com.example.userservice.service.Impl;
 
-import com.example.userservice.User.UserDTO;
 import com.example.userservice.Entity.User;
+import com.example.userservice.User.UserDTO;
 import com.example.userservice.repositoty.UserRepository;
 import com.example.userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +33,9 @@ public class UserImpl implements UserService {
 
     @Override
     public User updateUser(UserDTO userDTO) {
-        Optional<com.example.userservice.Entity.User> optionalUser = userRepository.findById(userDTO.getId());
+        Optional<User> optionalUser = userRepository.findById(userDTO.getId());
         if (optionalUser.isPresent()) {
-            com.example.userservice.Entity.User user = optionalUser.get();
+            User user = optionalUser.get();
 
 //            map ở đây
             user.setEmail(userDTO.getEmail());
@@ -54,8 +54,8 @@ public class UserImpl implements UserService {
     }
 
     @Override
-    public com.example.userservice.Entity.User getUserById(Long id) {
-        Optional<com.example.userservice.Entity.User> user = userRepository.findById(id);
+    public User getUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
         if(user.isPresent()){
             return user.get();
         }
@@ -64,9 +64,9 @@ public class UserImpl implements UserService {
 
     @Override
     public boolean updatePassword(Long id, String passOld, String passNew) {
-        Optional<com.example.userservice.Entity.User> user = userRepository.findById(id);
+        Optional<User> user = userRepository.findById(id);
         if(user.isPresent()){
-            com.example.userservice.Entity.User userEntity = user.get();
+            User userEntity = user.get();
             if(passwordEncoder.matches(passOld, userEntity.getPassword())) {
                 userRepository.updatePasswordById(id, passwordEncoder.encode(passNew));
                 return true;

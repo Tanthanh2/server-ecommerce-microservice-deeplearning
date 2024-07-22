@@ -1,10 +1,9 @@
 package com.example.userservice.Controller;
 
 
-import com.example.userservice.User.ShopDTO;
 import com.example.userservice.Entity.Shop;
+import com.example.userservice.User.ShopDTO;
 import com.example.userservice.service.ShopService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

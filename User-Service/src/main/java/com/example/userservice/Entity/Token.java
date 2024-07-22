@@ -1,19 +1,16 @@
 package com.example.userservice.Entity;
 
-import com.example.userservice.Entity.User;
 import com.example.userservice.token.TokenType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "Token")
+@Table
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Token {
 
     @Id

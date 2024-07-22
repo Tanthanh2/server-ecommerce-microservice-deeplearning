@@ -1,7 +1,7 @@
 package com.example.userservice.Controller;
 
-import com.example.userservice.User.UserDTO;
 import com.example.userservice.Entity.User;
+import com.example.userservice.User.UserDTO;
 import com.example.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -10,8 +10,6 @@ services=(
   ["cart-service"]="Cart-Service"
   ["purchase-service"]="Purchase-Service"
   ["notification-service"]="Notification-Service"
-
-
 )
 
 # Docker Hub username

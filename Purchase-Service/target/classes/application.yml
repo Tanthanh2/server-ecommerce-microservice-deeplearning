@@ -1,0 +1,30 @@
+eureka:
+  instance:
+    hostname: purchase-service
+  client:
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka/
+server:
+  port: 8084
+spring:
+  application:
+    name: Purchase-Service
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://purchase-mysql:3306/purchasedb
+    username: root
+    password: Abc@123456789
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+application:
+  config:
+    purchases-url: http://localhost:8222/api/v1/purchases
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0
