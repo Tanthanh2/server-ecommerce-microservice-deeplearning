@@ -9,6 +9,7 @@ import com.example.productservice.Repository.ProductMapper;
 import com.example.productservice.Repository.ProductRepository;
 import com.example.productservice.Service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
+
 public class ProductImpl implements ProductService {
-    private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
+    @Autowired
+    private  ProductRepository productRepository;
+    @Autowired
+    private  CategoryRepository categoryRepository;
 
     @Override
     public Product addProduct(ProductRequest productRequest) {

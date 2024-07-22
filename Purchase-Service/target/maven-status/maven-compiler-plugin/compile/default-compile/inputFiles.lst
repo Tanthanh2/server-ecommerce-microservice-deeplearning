@@ -1,8 +1,0 @@
-/app/src/main/java/com/example/purchaseservice/Controller/OrderController.java
-/app/src/main/java/com/example/purchaseservice/Controller/PaymentController.java
-/app/src/main/java/com/example/purchaseservice/Controller/ShippingController.java
-/app/src/main/java/com/example/purchaseservice/Entity/Order.java
-/app/src/main/java/com/example/purchaseservice/Entity/OrderItem.java
-/app/src/main/java/com/example/purchaseservice/Entity/Payment.java
-/app/src/main/java/com/example/purchaseservice/Entity/Shipping.java
-/app/src/main/java/com/example/purchaseservice/PurchaseServiceApplication.java

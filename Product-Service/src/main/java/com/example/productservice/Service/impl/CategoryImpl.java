@@ -4,15 +4,15 @@ import com.example.productservice.Product.CategoryRequest;
 import com.example.productservice.Entity.Category;
 import com.example.productservice.Repository.CategoryRepository;
 import com.example.productservice.Service.CategoryService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CategoryImpl implements CategoryService {
-    private final CategoryRepository categoryRepository;
+    @Autowired
+    private  CategoryRepository categoryRepository;
     @Override
     public List<Category> findAllCategory() {
         return categoryRepository.findAll();
