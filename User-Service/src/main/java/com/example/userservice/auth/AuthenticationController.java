@@ -2,7 +2,6 @@ package com.example.userservice.auth;
 
 
 
-import com.example.userservice.User.UserDTO;
 import com.example.userservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

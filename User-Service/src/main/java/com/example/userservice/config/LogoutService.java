@@ -1,6 +1,6 @@
 package com.example.userservice.config;
 
-import com.example.userservice.repositoty.TokenRepository;
+import com.example.userservice.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

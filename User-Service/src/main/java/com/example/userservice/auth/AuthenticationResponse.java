@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -30,5 +32,6 @@ public class AuthenticationResponse {
     private String ward;
     @JsonProperty("detailLocation")
     private String detailLocation;
+
 
 }

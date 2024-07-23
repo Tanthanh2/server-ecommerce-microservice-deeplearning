@@ -1,6 +1,5 @@
-package com.example.userservice.repositoty;
+package com.example.userservice.token;
 
-import com.example.userservice.Entity.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

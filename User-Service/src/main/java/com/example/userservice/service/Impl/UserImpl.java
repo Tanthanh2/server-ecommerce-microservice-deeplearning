@@ -18,10 +18,6 @@ public class UserImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private  PasswordEncoder passwordEncoder;
-
-
 
     @Override
     public boolean checkUserExist(String email, String phone) {
@@ -38,9 +34,9 @@ public class UserImpl implements UserService {
             User user = optionalUser.get();
 
 //            map ở đây
-            user.setEmail(userDTO.getEmail());
-            user.setPhone(userDTO.getPhone());
-            user.setPassword(userDTO.getPassword());
+//            user.setEmail(userDTO.getEmail());
+//            user.setPhone(userDTO.getPhone());
+//            user.setPassword(userDTO.getPassword());
             user.setCity(userDTO.getCity());
             user.setDistrict(userDTO.getDistrict());
             user.setWard(userDTO.getWard());
@@ -64,22 +60,22 @@ public class UserImpl implements UserService {
 
     @Override
     public boolean updatePassword(Long id, String passOld, String passNew) {
-        Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()){
-            User userEntity = user.get();
-            if(passwordEncoder.matches(passOld, userEntity.getPassword())) {
-                userRepository.updatePasswordById(id, passwordEncoder.encode(passNew));
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+//        Optional<User> user = userRepository.findById(id);
+//        if(user.isPresent()){
+//            User userEntity = user.get();
+//            if(passwordEncoder.matches(passOld, userEntity.getPassword())) {
+//                userRepository.updatePasswordById(id, passwordEncoder.encode(passNew));
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } else {
+//            return false;
+//        }
+        return true;
     }
 
-
-    }
+}
 
 
 

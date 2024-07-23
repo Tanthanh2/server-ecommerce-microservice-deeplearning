@@ -1,7 +1,6 @@
 package com.example.userservice.config;
 
 
-
 import com.example.userservice.auditing.ApplicationAuditAware;
 import com.example.userservice.repositoty.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @RequiredArgsConstructor
-public class    ApplicationConfig {
+public class ApplicationConfig {
 
     private final UserRepository repository;
 

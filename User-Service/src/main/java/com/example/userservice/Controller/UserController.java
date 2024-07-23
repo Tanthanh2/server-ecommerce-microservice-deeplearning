@@ -1,6 +1,7 @@
 package com.example.userservice.Controller;
 
 import com.example.userservice.Entity.User;
+import com.example.userservice.User.UpdatePassword;
 import com.example.userservice.User.UserDTO;
 import com.example.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,11 @@ public class UserController {
 
     @GetMapping("/test")
     public String testApi() {
-        return "users Service API is working!";
+        return "11users Service API is working111!";
+    }
+    @GetMapping("/test1")
+    public String testApi1() {
+        return "users Service API is working111!";
     }
 
     @GetMapping("/{id}")
@@ -41,9 +46,9 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}/password")
-    public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestParam String passOld, @RequestParam String passNew) {
-        boolean isUpdated = userService.updatePassword(id, passOld, passNew);
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<String> updatePassword(@PathVariable Long id, @RequestBody UpdatePassword updatePassword) {
+        boolean isUpdated = userService.updatePassword(id, updatePassword.getPassword(), updatePassword.getNew_password());
         if (isUpdated) {
             return new ResponseEntity<>("Password updated successfully", HttpStatus.OK);
         } else {

@@ -1,13 +1,15 @@
 package com.example.userservice.auth;
 
-import com.example.userservice.Entity.Token;
+import com.example.userservice.Entity.Role;
 import com.example.userservice.Entity.User;
-import com.example.userservice.User.UserDTO;
 import com.example.userservice.config.JwtService;
-import com.example.userservice.repositoty.TokenRepository;
+import com.example.userservice.repositoty.RoleRepository;
 import com.example.userservice.repositoty.UserRepository;
+import com.example.userservice.token.Token;
+import com.example.userservice.token.TokenRepository;
 import com.example.userservice.token.TokenType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +60,7 @@ public class AuthenticationService {
                 .detailLocation(savedUser.getDetailLocation())
                 .build();
     }
+
     public AuthenticationResponse authenticate(LoginDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -82,6 +86,7 @@ public class AuthenticationService {
                 .detailLocation(user.getDetailLocation())
                 .build();
     }
+
     private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
@@ -92,6 +97,7 @@ public class AuthenticationService {
                 .build();
         tokenRepository.save(token);
     }
+
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(Math.toIntExact(user.getId()));
         if (validUserTokens.isEmpty())
@@ -102,6 +108,7 @@ public class AuthenticationService {
         });
         tokenRepository.saveAll(validUserTokens);
     }
+
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response

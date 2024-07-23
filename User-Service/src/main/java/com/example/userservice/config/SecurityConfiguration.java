@@ -26,7 +26,9 @@ public class SecurityConfiguration {
     private final LogoutHandler logoutHandler;
 
     private static final String[] WHITE_LIST_URL = {
-            "/api/v1/**",
+            "/api/v1/users/register",
+            "/api/v1/users/authenticate",
+            "/api/v1/users/refresh-token"
     };
 
     @Bean

@@ -6,6 +6,6 @@ import com.example.userservice.User.UserDTO;
 public interface UserService {
     boolean checkUserExist(String email, String phone);
     User updateUser(UserDTO userDTO);
-    User getUserById(Long _id);
+    User getUserById(Long id);
     boolean updatePassword(Long id,String passOld, String passNew);
 }

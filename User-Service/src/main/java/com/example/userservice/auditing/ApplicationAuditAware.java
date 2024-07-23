@@ -1,4 +1,5 @@
 package com.example.userservice.auditing;
+
 import com.example.userservice.Entity.User;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -21,7 +22,7 @@ public class ApplicationAuditAware implements AuditorAware<Integer> {
             return Optional.empty();
         }
 
-        User userPrincipal = (User) authentication.getPrincipal();
+        User userPrincipal= (User) authentication.getPrincipal();
         return Optional.ofNullable(Math.toIntExact(userPrincipal.getId()));
     }
 }
