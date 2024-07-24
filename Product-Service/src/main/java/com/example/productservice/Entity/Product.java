@@ -21,30 +21,32 @@ public class Product {
     @ElementCollection
     private List<String> images;
     private double price;
-    private double rating = 0;
-    private double priceBeforeDiscount;
+    private double priceBeforeDiscount = 0;
     private int quantity;
-    private int sold = 0;
-    private int view = 0;
-    private int orderNumber = 0;
     private String name;
     private String description;
     private String shortDescription;
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
     private String image;
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
     private Long idShop;
-    private boolean isPublic = true;
-
     private double length;
     private double width;
     private double hight;
     private double weight;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private double rating = 0;
+    private int sold = 0;
+    private int view = 0;
+    private int orderNumber = 0;
+    private boolean isPublic = true;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SizeQuantity> sizeQuantities; // Cho phép null

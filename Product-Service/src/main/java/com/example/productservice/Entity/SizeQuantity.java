@@ -14,7 +14,6 @@ public class SizeQuantity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String size;
     private String color;
     private int quantity;
@@ -23,5 +22,4 @@ public class SizeQuantity {
     @JoinColumn(name = "product_id", nullable = false)
     @JsonIgnore
     private Product product;
-
 }

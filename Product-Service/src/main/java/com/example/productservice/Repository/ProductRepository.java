@@ -17,10 +17,10 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     @Query("SELECT p FROM Product p " +
             "WHERE (:name IS NULL OR lower(p.name) LIKE %:name%) " +
-            "AND (:category IS NULL OR lower(p.category.name) LIKE %:category%) " +
+            "AND (:idcategory IS NULL OR p.category.id = :idcategory) " +
             "AND (:price_min IS NULL OR p.price >= :price_min) " +
-            "AND (:rating_filter IS NULL OR p.rating >= :rating_filter) " +
             "AND (:price_max IS NULL OR p.price <= :price_max) " +
+            "AND (:rating_filter IS NULL OR p.rating >= :rating_filter) " +
             "AND p.isPublic = true " +
             "ORDER BY " +
             "CASE WHEN :sortBy = 'view' THEN p.view END DESC, " +
@@ -29,12 +29,13 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "CASE WHEN :sortBy = 'price' AND :order = 'desc' THEN p.price END DESC, " +
             "p.id") // Thêm sắp xếp theo ID để đảm bảo thứ tự nhất quán
     Page<Product> findAllWithFiltersAndSorting(@Param("name") String name,
-                                               @Param("category") String category,
+                                               @Param("idcategory") Long idcategory,
                                                @Param("price_min") Double price_min,
                                                @Param("price_max") Double price_max,
                                                @Param("sortBy") String sortBy,
                                                @Param("order") String order,
                                                @Param("rating_filter") Integer rating_filter,
                                                Pageable pageable);
+
 
 }
