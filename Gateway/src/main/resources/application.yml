@@ -1,0 +1,42 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+server:
+  port: 8222
+spring:
+  application:
+    name: Gateway
+  cloud:
+    gateway:
+      routes:
+        - id: users
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/v1/users/**
+          filters:
+            - AuthenticationFilter
+        - id: products
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/api/v1/products/**
+          filters:
+            - AuthenticationFilter
+        - id: carts
+          uri: lb://CART-SERVICE
+          predicates:
+            - Path=/api/v1/carts/**
+          filters:
+            - AuthenticationFilter
+        - id: purchases
+          uri: lb://PURCHASE-SERVICE
+          predicates:
+            - Path=/api/v1/purchases/**
+          filters:
+            - AuthenticationFilter
+management:
+  tracing:
+    sampling:
+      probability: 1.0
