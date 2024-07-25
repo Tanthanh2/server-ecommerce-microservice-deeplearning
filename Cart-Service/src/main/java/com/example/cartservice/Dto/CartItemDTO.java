@@ -1,21 +1,17 @@
-package com.example.cartservice.Entity;
+package com.example.cartservice.Dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
+public class CartItemDTO {
     @NotNull(message = "Please input Product Id")
     private Long idProduct;
 
@@ -25,10 +21,5 @@ public class CartItem {
     @NotNull(message = "Please input Quantity Id")
     @Min(value = 1, message = "Minimum quantity is 1")
     private int quantity;
-
-    @ManyToOne
-//    @JoinColumn(name = "cart_id", nullable = false)
-    @JsonIgnore
-    private Cart cart;
 }
 

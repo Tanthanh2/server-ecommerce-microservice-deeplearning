@@ -1,5 +1,6 @@
 package com.example.cartservice.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

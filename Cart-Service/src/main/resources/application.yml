@@ -11,14 +11,15 @@ spring:
     name: Cart-Service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://cart-mysql:3306/cartdb
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3303/cartdb
     username: root
     password: Abc@123456789
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
 
 application:
   config:
