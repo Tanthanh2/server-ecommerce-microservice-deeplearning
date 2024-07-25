@@ -2,6 +2,8 @@ package com.example.productservice.controller;
 
 import com.example.productservice.Product.CategoryRequest;
 import com.example.productservice.Entity.Category;
+import com.example.productservice.Reponse.Category.CategoryListReponse;
+import com.example.productservice.Reponse.Category.CategorySingleReponse;
 import com.example.productservice.Service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +22,17 @@ public class CategoryController {
     private  CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<Category>> findAllCategory() {
+    public ResponseEntity<?> findAllCategory() {
         List<Category> categories = categoryService.findAllCategory();
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+        CategoryListReponse categoryListReponse = new CategoryListReponse("OK", categories);
+        return new ResponseEntity<>(categoryListReponse, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getById(@PathVariable Long id) {
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         Category category = categoryService.getById(id);
-        return new ResponseEntity<>(category, HttpStatus.OK);
+        CategorySingleReponse categorySingleReponse = new CategorySingleReponse("OK", category);
+        return new ResponseEntity<>(categorySingleReponse, HttpStatus.OK);
     }
 
     @PostMapping

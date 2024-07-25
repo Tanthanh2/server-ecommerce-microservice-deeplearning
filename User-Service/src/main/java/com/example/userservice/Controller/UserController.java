@@ -1,6 +1,7 @@
 package com.example.userservice.Controller;
 
 import com.example.userservice.Entity.User;
+import com.example.userservice.User.ProfileReponse;
 import com.example.userservice.User.UpdatePassword;
 import com.example.userservice.User.UserDTO;
 import com.example.userservice.service.UserService;
@@ -16,20 +17,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/test")
-    public String testApi() {
-        return "11users Service API is working111!";
-    }
-    @GetMapping("/test1")
-    public String testApi1() {
-        return "users Service API is working111!";
-    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);
+        ProfileReponse profileReponse = new ProfileReponse("OK", user);
+
         if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(profileReponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
