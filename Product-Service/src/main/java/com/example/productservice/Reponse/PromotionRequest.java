@@ -1,20 +1,17 @@
-package com.example.productservice.Entity;
+package com.example.productservice.Reponse;
 
-import jakarta.persistence.*;
+import jakarta.persistence.ElementCollection;
 import lombok.*;
 
 import java.util.Date;
 import java.util.List;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Promotion {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class PromotionRequest {
     private Long id;
 
     private String name;
@@ -26,7 +23,6 @@ public class Promotion {
     private double discountAmount;
     private Long idShop;
 
-    @ManyToMany(mappedBy = "promotions")
-    private List<Product> products;
-
+    @ElementCollection
+    private List<Long> idProducts;
 }

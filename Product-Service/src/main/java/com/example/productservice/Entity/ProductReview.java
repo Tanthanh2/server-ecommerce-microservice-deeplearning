@@ -18,6 +18,12 @@ public class ProductReview {
     private Long idCustomer;
     private int rating;
     private String comment;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product; // Added reference to Product
+
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
     @PrePersist

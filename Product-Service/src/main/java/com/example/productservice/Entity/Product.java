@@ -37,7 +37,8 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProductReview> reviews; // Added bidirectional relationship
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -50,6 +51,15 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SizeQuantity> sizeQuantities; // Cho phép null
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_promotion",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "promotion_id")
+    )
+    @JsonIgnore
+    private List<Promotion> promotions;
 
     @PrePersist
     protected void onCreate() {
