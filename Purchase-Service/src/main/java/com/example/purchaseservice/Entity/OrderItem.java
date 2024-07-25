@@ -18,7 +18,6 @@ public class OrderItem {
     private Long idSizeQuantity; // cho phép null nếu là các sản phẩm k có size
     private int quantity;
 
-
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
