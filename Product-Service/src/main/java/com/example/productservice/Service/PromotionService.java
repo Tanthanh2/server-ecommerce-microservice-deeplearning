@@ -10,6 +10,5 @@ public interface PromotionService {
     public Promotion updatePromotion(Long id, PromotionRequest promotionRequest);
     public List<Promotion> getPromotionsByIdShop(Long idShop);
     public  Promotion getById(Long id);
-
     public List<Promotion> getActivePromotionsByProductId(Long productId);
 }

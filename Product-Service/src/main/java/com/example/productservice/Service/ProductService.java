@@ -1,7 +1,9 @@
 package com.example.productservice.Service;
 
+import com.example.productservice.Entity.SizeQuantity;
 import com.example.productservice.Product.ProductRequest;
 import com.example.productservice.Entity.Product;
+import com.example.productservice.Reponse.ProductWithSizeQuantityReponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,7 +20,7 @@ public interface ProductService {
 
     public void incrementProductView(Long id);
     List<Product> getListByShopId(Long shopId);
-
+    public SizeQuantity findByIdSizeQuantity(Long id);
     Product getById(Long id);
 
     Page<Product> findAllWithFiltersAndSorting(String name,
@@ -29,4 +31,6 @@ public interface ProductService {
                                                String order,
                                                Integer rating_filter,
                                                Pageable pageable);
+
+    ProductWithSizeQuantityReponse findProductWithSize(Long idProduct, Long idSizeQuantity);
 }

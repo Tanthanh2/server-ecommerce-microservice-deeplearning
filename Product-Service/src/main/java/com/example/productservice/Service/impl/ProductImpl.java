@@ -1,16 +1,21 @@
 package com.example.productservice.Service.impl;
 
 import com.example.productservice.Entity.SizeQuantity;
+import com.example.productservice.Product.Order_Cart.ProductReponseCart_Order;
+import com.example.productservice.Product.Order_Cart.SizeQuantityReponseCart_Order;
 import com.example.productservice.Product.ProductRequest;
 import com.example.productservice.Product.SizeQuantityRequest;
 import com.example.productservice.Entity.Category;
 import com.example.productservice.Entity.Product;
+import com.example.productservice.Reponse.ProductReponse;
+import com.example.productservice.Reponse.ProductWithSizeQuantityReponse;
 import com.example.productservice.Repository.CategoryRepository;
 import com.example.productservice.Repository.ProductMapper;
 import com.example.productservice.Repository.ProductRepository;
 import com.example.productservice.Repository.SizeQuantityRepository;
 import com.example.productservice.Service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +33,8 @@ public class ProductImpl implements ProductService {
     private  CategoryRepository categoryRepository;
     @Autowired
     private SizeQuantityRepository sizeQuantityRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public Product addProduct(ProductRequest productRequest) {
@@ -152,6 +159,12 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
+    public SizeQuantity findByIdSizeQuantity(Long id) {
+        Optional<SizeQuantity> sizeQuantity = sizeQuantityRepository.findById(id);
+        return sizeQuantity.orElse(null);
+    }
+
+    @Override
     public Product getById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
     }
@@ -159,6 +172,26 @@ public class ProductImpl implements ProductService {
     @Override
     public Page<Product> findAllWithFiltersAndSorting(String name, Long idcategory, Double price_min, Double price_max, String sortBy, String order, Integer rating_filter, Pageable pageable) {
         return productRepository.findAllWithFiltersAndSorting(name, idcategory, price_min, price_max, sortBy, order, rating_filter, pageable);
+    }
+
+    @Override
+    public ProductWithSizeQuantityReponse findProductWithSize(Long idProduct, Long idSizeQuantity) {
+        ProductWithSizeQuantityReponse product = new ProductWithSizeQuantityReponse();
+
+        Product product1 = this.getById(idProduct);
+        SizeQuantity sizeQuantity = this.findByIdSizeQuantity(idSizeQuantity);
+        if (product1 == null) {
+            return null; // Handle not found case
+        }
+
+        ProductReponseCart_Order productResponse = modelMapper.map(product1, ProductReponseCart_Order.class);
+        SizeQuantityReponseCart_Order sizeQuantityResponse = sizeQuantity != null ? modelMapper.map(sizeQuantity, SizeQuantityReponseCart_Order.class) : null;
+
+
+        return ProductWithSizeQuantityReponse.builder()
+                .product(productResponse)
+                .sizeQuantity(sizeQuantityResponse)
+                .build();
     }
 
     @Override

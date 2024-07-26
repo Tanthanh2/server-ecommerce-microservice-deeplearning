@@ -1,10 +1,7 @@
 package com.example.productservice.controller;
 
 import com.example.productservice.Entity.Product;
-import com.example.productservice.Reponse.Pagination;
-import com.example.productservice.Reponse.ProductData;
-import com.example.productservice.Reponse.ProductReponSingle;
-import com.example.productservice.Reponse.ProductReponse;
+import com.example.productservice.Reponse.*;
 import com.example.productservice.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -73,5 +70,20 @@ public class ProductController {
         ProductData productData = new ProductData(list,pagination);
         ProductReponse p = new ProductReponse("Thành Công", productData);
         return new ResponseEntity<>(p, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/{idProduct}/size/{idSizeQuantity}")
+    public ResponseEntity<ProductWithSizeQuantityReponse> getProductWithSizeQuantity(
+            @PathVariable Long idProduct,
+            @PathVariable Long idSizeQuantity) {
+
+        ProductWithSizeQuantityReponse response = productService.findProductWithSize(idProduct, idSizeQuantity);
+
+        if (response.getProduct() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(response);
     }
 }
