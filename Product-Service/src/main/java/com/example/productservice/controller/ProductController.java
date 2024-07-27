@@ -2,6 +2,7 @@ package com.example.productservice.controller;
 
 import com.example.productservice.Entity.Product;
 import com.example.productservice.Reponse.*;
+import com.example.productservice.Reponse.ReponseOrder.ReponseOrderData;
 import com.example.productservice.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -86,4 +87,10 @@ public class ProductController {
 
         return ResponseEntity.ok(response);
     }
+    @PostMapping("/details")
+    public ResponseEntity<List<Product_Promotion_SizeQuantityy_GET>> getOrderDetails(@RequestBody ReponseOrderData reponseOrderData) {
+        List<Product_Promotion_SizeQuantityy_GET> orderDetails = productService.getOderDetails(reponseOrderData);
+        return ResponseEntity.ok(orderDetails);
+    }
+
 }

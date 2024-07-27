@@ -4,6 +4,8 @@ import com.example.productservice.Entity.SizeQuantity;
 import com.example.productservice.Product.ProductRequest;
 import com.example.productservice.Entity.Product;
 import com.example.productservice.Reponse.ProductWithSizeQuantityReponse;
+import com.example.productservice.Reponse.Product_Promotion_SizeQuantityy_GET;
+import com.example.productservice.Reponse.ReponseOrder.ReponseOrderData;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -33,4 +35,7 @@ public interface ProductService {
                                                Pageable pageable);
 
     ProductWithSizeQuantityReponse findProductWithSize(Long idProduct, Long idSizeQuantity);
+    Product_Promotion_SizeQuantityy_GET Product_Promotion_SizeQuantityy_GET_(Long idproduct, Long idSizeQuantity, Long idPromotion, int quantity);
+    List<Product_Promotion_SizeQuantityy_GET> getOderDetails(ReponseOrderData reponseOrderData);
+
 }

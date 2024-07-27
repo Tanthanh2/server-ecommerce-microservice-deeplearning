@@ -1,19 +1,16 @@
-package com.example.purchaseservice.Entity;
+package com.example.purchaseservice.Request;
 
-import jakarta.persistence.*;
+
 import lombok.*;
 
 import java.util.Date;
 
-@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Shipping {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class ShippingRequest {
     private Long id;
     private Long idDriver;
     private Date shippingDate;
@@ -21,8 +18,5 @@ public class Shipping {
     private  String status; // CHƯA LẤY HÀNG, ĐANG GIAO, ĐÃ GIAO, TRẢ HÀNG
     private String notes;
     private double cost;
-
-    @OneToOne
-    @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
-    private Order order;
+    private Long idOrder;
 }

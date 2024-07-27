@@ -17,9 +17,8 @@ public class Payment {
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
     private Order order;
-
     private Date paymentDate;
     private String status;
-    private String method;
+    private String method; // COD, ONLINE
     private double amount;
 }

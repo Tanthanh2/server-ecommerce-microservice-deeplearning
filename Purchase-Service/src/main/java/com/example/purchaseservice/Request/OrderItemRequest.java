@@ -10,6 +10,7 @@ import lombok.*;
 public class OrderItemRequest {
     private Long id;
     private Long productId;
+    private Long promotionId;
     private Long idSizeQuantity; // cho phép null nếu là các sản phẩm k có size
     private int quantity;
 }

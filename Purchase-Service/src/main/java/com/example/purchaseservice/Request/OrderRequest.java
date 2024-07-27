@@ -21,7 +21,6 @@ import java.util.List;
 public class OrderRequest {
     private Long id;
     private Long customerId;
-    private Long promotionId;
     private Long shopId;
     private double totalMoney;
     private String status; // Trạng thái hiện tại của đơn hàng (ví dụ: pending, paid, shipped, delivered, cancelled)

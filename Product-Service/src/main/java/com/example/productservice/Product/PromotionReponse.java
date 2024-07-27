@@ -1,17 +1,15 @@
-package com.example.productservice.Reponse;
+package com.example.productservice.Product;
 
-import jakarta.persistence.ElementCollection;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PromotionRequest {
+public class PromotionReponse {
     private Long id;
     private String name;
     private Date startDate;
@@ -21,7 +19,4 @@ public class PromotionRequest {
     private String description;
     private double discountAmount;
     private Long idShop;
-
-    @ElementCollection
-    private List<Long> idProducts;
 }

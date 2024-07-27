@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "orders") // Change the table name from "order" to "orders"
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -18,9 +19,7 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long customerId;
-    private Long promotionId;
     private Long shopId;
-
     @Column(nullable = false, updatable = false)
     private Date orderDate;
     private double totalMoney;

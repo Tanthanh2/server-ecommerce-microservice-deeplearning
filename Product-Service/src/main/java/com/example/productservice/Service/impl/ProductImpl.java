@@ -1,5 +1,6 @@
 package com.example.productservice.Service.impl;
 
+import com.example.productservice.Entity.Promotion;
 import com.example.productservice.Entity.SizeQuantity;
 import com.example.productservice.Product.Order_Cart.ProductReponseCart_Order;
 import com.example.productservice.Product.Order_Cart.SizeQuantityReponseCart_Order;
@@ -9,10 +10,11 @@ import com.example.productservice.Entity.Category;
 import com.example.productservice.Entity.Product;
 import com.example.productservice.Reponse.ProductReponse;
 import com.example.productservice.Reponse.ProductWithSizeQuantityReponse;
-import com.example.productservice.Repository.CategoryRepository;
-import com.example.productservice.Repository.ProductMapper;
-import com.example.productservice.Repository.ProductRepository;
-import com.example.productservice.Repository.SizeQuantityRepository;
+import com.example.productservice.Reponse.Product_Promotion_SizeQuantityy_GET;
+import com.example.productservice.Reponse.PromotionRequest;
+import com.example.productservice.Reponse.ReponseOrder.ReponseOrder;
+import com.example.productservice.Reponse.ReponseOrder.ReponseOrderData;
+import com.example.productservice.Repository.*;
 import com.example.productservice.Service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +36,8 @@ public class ProductImpl implements ProductService {
     private  CategoryRepository categoryRepository;
     @Autowired
     private SizeQuantityRepository sizeQuantityRepository;
+    @Autowired
+    private PromotionRepository promotionRepository;
     @Autowired
     private ModelMapper modelMapper;
 
@@ -192,6 +197,57 @@ public class ProductImpl implements ProductService {
                 .product(productResponse)
                 .sizeQuantity(sizeQuantityResponse)
                 .build();
+    }
+
+    @Override
+    public Product_Promotion_SizeQuantityy_GET Product_Promotion_SizeQuantityy_GET_(Long idproduct, Long idSizeQuantity, Long idPromotion, int quantity) {
+
+
+        Product product1 = this.getById(idproduct);
+        if (product1 == null) {
+            return null; // Handle not found case
+        }
+
+        if(idSizeQuantity == null){
+            idSizeQuantity = 0l;
+        }
+        SizeQuantity sizeQuantity = this.findByIdSizeQuantity(idSizeQuantity);
+
+
+        Promotion promotion1 =null;
+        if(idPromotion != null){
+            Optional<Promotion> promotion = promotionRepository.findById(idPromotion);
+            if(promotion.isPresent()) {
+                promotion1 = promotion.get();
+            }
+        }
+
+
+
+        ProductReponseCart_Order productResponse = modelMapper.map(product1, ProductReponseCart_Order.class);
+        SizeQuantityReponseCart_Order sizeQuantityResponse = sizeQuantity != null ? modelMapper.map(sizeQuantity, SizeQuantityReponseCart_Order.class) : null;
+        PromotionRequest promotionRequest = promotion1 != null ? modelMapper.map(promotion1, PromotionRequest.class) : null;
+
+        return Product_Promotion_SizeQuantityy_GET.builder()
+                .product(productResponse)
+                .promotionRequest(promotionRequest)
+                .sizeQuantity(sizeQuantityResponse)
+                .quantity(quantity)
+                .build();
+    }
+
+    @Override
+    public List<Product_Promotion_SizeQuantityy_GET> getOderDetails(ReponseOrderData reponseOrderData) {
+        List<Product_Promotion_SizeQuantityy_GET> list = new ArrayList<>();
+        List<ReponseOrder> reponseOrderList = reponseOrderData.getOrderItems();
+
+        for(ReponseOrder order : reponseOrderList){
+            Product_Promotion_SizeQuantityy_GET productPromotionSizeQuantityyGet= this.Product_Promotion_SizeQuantityy_GET_(
+                    order.getProductId(),order.getIdSizeQuantity(),order.getPromotionId(),order.getQuantity()
+            );
+            list.add(productPromotionSizeQuantityyGet);
+        }
+        return list;
     }
 
     @Override
