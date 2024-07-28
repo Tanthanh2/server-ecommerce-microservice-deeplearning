@@ -1,8 +1,7 @@
 import express from "express";
 
 import MessageResponse from "../interfaces/MessageResponse";
-import hello from "./hello";
-
+import email from './email';
 const router = express.Router();
 
 router.get<{}, MessageResponse>("/", (req, res) => {
@@ -10,7 +9,6 @@ router.get<{}, MessageResponse>("/", (req, res) => {
     message: "Root API1",
   });
 });
-
-router.use("/hello", hello);
+router.use('/email', email);
 
 export default router;

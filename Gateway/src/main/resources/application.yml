@@ -36,6 +36,13 @@ spring:
             - Path=/api/v1/purchases/**
           filters:
             - AuthenticationFilter
+
+        - id: notifications
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/v1/notifications/**
+          filters:
+            - AuthenticationFilter
 management:
   tracing:
     sampling:
