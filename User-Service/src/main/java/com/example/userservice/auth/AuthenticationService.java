@@ -136,4 +136,18 @@ public class AuthenticationService {
             }
         }
     }
+
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String token;
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return;
+        }
+        token = authHeader.substring(7);
+        var user = jwtService.extractUsername(token);
+        if (user != null) {
+            var userDetails = repository.findByEmail(user).orElseThrow();
+            revokeAllUserTokens(userDetails);
+        }
+    }
 }

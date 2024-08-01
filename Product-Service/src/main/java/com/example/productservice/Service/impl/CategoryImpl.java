@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryImpl implements CategoryService {
@@ -30,5 +31,14 @@ public class CategoryImpl implements CategoryService {
                 .name(categoryRequest.getName())
                 .build();
         return categoryRepository.save(category);
+    }
+
+    @Override
+    public String addCategoryList(List<String> data) {
+        List<Category> categories = data.stream()
+                .map(name -> Category.builder().name(name).build())
+                .collect(Collectors.toList());
+        categoryRepository.saveAll(categories);
+        return "Categories added successfully";
     }
 }

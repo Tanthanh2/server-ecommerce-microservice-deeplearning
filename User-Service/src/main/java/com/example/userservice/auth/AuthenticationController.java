@@ -2,6 +2,8 @@ package com.example.userservice.auth;
 
 
 
+import com.example.userservice.User.AuthResponse;
+import com.example.userservice.User.SuccessResponse;
 import com.example.userservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,15 +30,23 @@ public class AuthenticationController {
         if (iUser.checkUserExist(request.getEmail(), request.getPhone())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Người dùng với thông tin này đã tồn tại");
         }
-        return ResponseEntity.ok(service.register(request));
+        AuthenticationResponse data = service.register(request);
+        UserDTO userDTO = new UserDTO(data.getId(), data.getEmail(), data.getPhone(), "password", data.getCity(), data.getDistrict(), data.getWard(), data.getDetailLocation());
+        AuthResponse authResponse = new AuthResponse(data.getAccessToken(), 604800l, data.getRefreshToken(), 8640000l,userDTO );
+        SuccessResponse SuccessResponse = new SuccessResponse("Đăng kí thành công", authResponse);
+        return ResponseEntity.ok(SuccessResponse);
     }
 
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<?> authenticate(
             @RequestBody LoginDTO request
     ) {
-        return ResponseEntity.ok(service.authenticate(request));
+        AuthenticationResponse data = service.authenticate(request);
+        UserDTO userDTO = new UserDTO(data.getId(), data.getEmail(), data.getPhone(), "password", data.getCity(), data.getDistrict(), data.getWard(), data.getDetailLocation());
+        AuthResponse authResponse = new AuthResponse(data.getAccessToken(), 604800l, data.getRefreshToken(), 8640000l,userDTO );
+        SuccessResponse SuccessResponse = new SuccessResponse("Đăng kí thành công", authResponse);
+        return ResponseEntity.ok(SuccessResponse);
     }
 
     @PostMapping("/refresh-token")
@@ -45,5 +55,11 @@ public class AuthenticationController {
             HttpServletResponse response
     ) throws IOException {
         service.refreshToken(request, response);
+    }
+
+    @PostMapping("/logout")
+    public Message logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Message message = new Message("Đăng xuất thành công");
+        return message;
     }
 }

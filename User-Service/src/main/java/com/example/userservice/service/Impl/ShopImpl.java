@@ -23,7 +23,9 @@ public class ShopImpl implements ShopService {
     @Override
     public Shop registerShop(ShopDTO shopDTO) {
         Shop shop = new Shop();
-        shop.setName(shop.getName());
+
+        shop.setName(shopDTO.getName());
+
         shop.setDescription(shopDTO.getDescription());
         shop.setType(shopDTO.getType());
         shop.setCity(shopDTO.getCity());
@@ -58,5 +60,15 @@ public class ShopImpl implements ShopService {
     @Override
     public Shop getShopBySellerId(Long sellerId) {
         return shopRepository.findBySellerId(sellerId).orElse(null);
+    }
+
+    @Override
+    public Long doesShopExistForSeller(Long sellerId) {
+        if(shopRepository.existsBySellerId(sellerId)){
+            Shop shop = this.getShopBySellerId(sellerId);
+            return shop.getId();
+        }else {
+            return 0l;
+        }
     }
 }

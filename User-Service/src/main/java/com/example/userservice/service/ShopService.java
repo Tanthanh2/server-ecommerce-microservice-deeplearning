@@ -8,4 +8,5 @@ public interface ShopService {
     Shop updateShop(ShopDTO shopDTO);
     Shop getShopById(Long id);
     Shop getShopBySellerId(Long sellerId);
+    Long doesShopExistForSeller(Long sellerId);
 }

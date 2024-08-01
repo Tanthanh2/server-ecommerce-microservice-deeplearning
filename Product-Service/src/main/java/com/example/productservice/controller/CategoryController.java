@@ -24,7 +24,7 @@ public class CategoryController {
     @GetMapping
     public ResponseEntity<?> findAllCategory() {
         List<Category> categories = categoryService.findAllCategory();
-        CategoryListReponse categoryListReponse = new CategoryListReponse("OK", categories);
+        CategoryListReponse categoryListReponse = new CategoryListReponse("Lấy categories thành công", categories);
         return new ResponseEntity<>(categoryListReponse, HttpStatus.OK);
     }
 
@@ -40,5 +40,13 @@ public class CategoryController {
         Category category = categoryService.addCategory(categoryRequest);
         return new ResponseEntity<>(category, HttpStatus.CREATED);
     }
+
+    @PostMapping("/list")
+    public ResponseEntity<String> handleCategoryRequest(@RequestBody List<String> categoryRequestList) {
+        String response = categoryService.addCategoryList(categoryRequestList);
+        return ResponseEntity.ok(response);
+    }
+
+
 
 }

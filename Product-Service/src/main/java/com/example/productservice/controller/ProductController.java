@@ -47,6 +47,8 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
+
+    // http://localhost:3000/?page=1&price_max=4444444&price_min=30000&rating_filter=2&category=8&name=2121
     @GetMapping("/search")
     public ResponseEntity<?>  searchProducts(
             @RequestParam(required = false) String name,

@@ -28,7 +28,9 @@ public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {
             "/api/v1/users/register",
             "/api/v1/users/authenticate",
-            "/api/v1/users/refresh-token"
+            "/api/v1/users/refresh-token",
+            "/api/v1/users/logout"
+
     };
 
     @Bean
@@ -44,14 +46,6 @@ public class SecurityConfiguration {
                 ).sessionManagement(sesson -> sesson.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .logout(logout ->
-                        logout.logoutUrl("/api/v1/users/logout")
-                                .addLogoutHandler(logoutHandler)
-                                .logoutSuccessHandler((request, response, authentication) -> {
-                                    SecurityContextHolder.clearContext();
-                                    response.sendRedirect("http://localhost:3000/login");
-                                })
-                )
         ;
         return http.build();
     }

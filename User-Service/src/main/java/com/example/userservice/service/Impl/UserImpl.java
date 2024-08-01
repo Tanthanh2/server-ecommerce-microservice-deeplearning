@@ -1,7 +1,7 @@
 package com.example.userservice.service.Impl;
 
 import com.example.userservice.Entity.User;
-import com.example.userservice.User.UserDTO;
+import com.example.userservice.auth.UserDTO;
 import com.example.userservice.repositoty.UserRepository;
 import com.example.userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,8 @@ import java.util.Optional;
 public class UserImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private  PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -35,7 +37,7 @@ public class UserImpl implements UserService {
 
 //            map ở đây
 //            user.setEmail(userDTO.getEmail());
-//            user.setPhone(userDTO.getPhone());
+            user.setPhone(userDTO.getPhone());
 //            user.setPassword(userDTO.getPassword());
             user.setCity(userDTO.getCity());
             user.setDistrict(userDTO.getDistrict());
@@ -60,19 +62,18 @@ public class UserImpl implements UserService {
 
     @Override
     public boolean updatePassword(Long id, String passOld, String passNew) {
-//        Optional<User> user = userRepository.findById(id);
-//        if(user.isPresent()){
-//            User userEntity = user.get();
-//            if(passwordEncoder.matches(passOld, userEntity.getPassword())) {
-//                userRepository.updatePasswordById(id, passwordEncoder.encode(passNew));
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        } else {
-//            return false;
-//        }
-        return true;
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()){
+            User userEntity = user.get();
+            if(passwordEncoder.matches(passOld, userEntity.getPassword())) {
+                userRepository.updatePasswordById(id, passwordEncoder.encode(passNew));
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
 }

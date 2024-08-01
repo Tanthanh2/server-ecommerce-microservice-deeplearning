@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProductControllerSeller {
     @Autowired
     private ProductService productService;
+
     // add
     @PostMapping("/")
     public ResponseEntity<?> addProduct(@RequestBody ProductRequest product) {
@@ -63,5 +64,7 @@ public class ProductControllerSeller {
         productService.updateIsPublic(id, isPublic);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 
 }

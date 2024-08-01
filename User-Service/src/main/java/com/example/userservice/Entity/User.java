@@ -25,7 +25,6 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String email;
     private String phone;
     private String password;
@@ -35,6 +34,7 @@ public class User implements UserDetails {
     private String detailLocation;
 
     @OneToOne(mappedBy = "seller", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Shop shop;
 
     @OneToMany(mappedBy = "user")

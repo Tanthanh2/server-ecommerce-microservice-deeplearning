@@ -9,4 +9,5 @@ public interface CategoryService {
     List<Category> findAllCategory();
     Category getById(Long id);
     Category addCategory(CategoryRequest categoryRequest);
+    String addCategoryList(List<String> data);
 }

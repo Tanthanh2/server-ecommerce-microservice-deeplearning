@@ -45,4 +45,9 @@ public class ShopController {
         }
         return new ResponseEntity<>(shop, HttpStatus.OK);
     }
+
+    @GetMapping("/exists")
+    public Long checkShopExists(@RequestParam Long sellerId) {
+        return shopService.doesShopExistForSeller(sellerId);
+    }
 }

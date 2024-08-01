@@ -3,7 +3,7 @@ package com.example.userservice.Controller;
 import com.example.userservice.Entity.User;
 import com.example.userservice.User.ProfileReponse;
 import com.example.userservice.User.UpdatePassword;
-import com.example.userservice.User.UserDTO;
+import com.example.userservice.auth.UserDTO;
 import com.example.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,11 +31,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
         userDTO.setId(id);
         User updatedUser = userService.updateUser(userDTO);
+        ProfileReponse profileReponse = new ProfileReponse("OK", updatedUser);
         if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            return new ResponseEntity<>(profileReponse, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
