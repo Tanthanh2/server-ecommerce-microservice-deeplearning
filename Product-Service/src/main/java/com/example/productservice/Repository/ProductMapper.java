@@ -28,7 +28,7 @@ public class ProductMapper {
                 .idShop(productRequest.getIdShop())
                 .length(productRequest.getLength())
                 .width(productRequest.getWidth())
-                .hight(productRequest.getHight())
+                .height(productRequest.getHeight())
                 .weight(productRequest.getWeight())
                 .sizeQuantities(toSizeQuantityEntities(productRequest.getSizeQuantities()))
                 .build();

@@ -15,7 +15,7 @@ public class ProductControllerSeller {
     private ProductService productService;
 
     // add
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> addProduct(@RequestBody ProductRequest product) {
         Product newProduct = productService.addProduct(product);
         if(newProduct != null){
@@ -33,13 +33,11 @@ public class ProductControllerSeller {
         Product updatedProduct = productService.updateProductBasic(id, productRequest);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
-
     @PutMapping("/{id}/detail")
     public ResponseEntity<Product> updateProductDetail(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
         Product updatedProduct = productService.updateProductDetail(id, productRequest);
         return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
     }
-
     @PutMapping("/{id}/sell")
     public ResponseEntity<Product> updateProductSell(@PathVariable Long id, @RequestBody ProductRequest productRequest) {
         Product updatedProduct = productService.updateProductSell(id, productRequest);

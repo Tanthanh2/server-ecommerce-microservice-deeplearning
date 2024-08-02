@@ -22,7 +22,7 @@ public class ProductRequest {
 
     private double length;
     private double width;
-    private double hight;
+    private double height;
     private double weight;
 
     private double price;

@@ -30,9 +30,8 @@ public class Product {
     private Long idShop;
     private double length;
     private double width;
-    private double hight;
+    private double height;
     private double weight;
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -51,6 +50,9 @@ public class Product {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<SizeQuantity> sizeQuantities; // Cho phép null
+
+
+
 
     @ManyToMany
     @JoinTable(

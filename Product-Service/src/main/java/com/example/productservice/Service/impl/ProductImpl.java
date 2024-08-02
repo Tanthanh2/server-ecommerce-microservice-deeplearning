@@ -148,7 +148,7 @@ public class ProductImpl implements ProductService {
         if(product.isPresent()){
             Product product1 = product.get();
             product1.setWeight(productRequest.getWeight());
-            product1.setHight(productRequest.getHight());
+            product1.setHeight(productRequest.getHeight());
             product1.setWidth(productRequest.getWidth());
             product1.setLength(productRequest.getLength());
             return productRepository.save(product1);
@@ -171,7 +171,7 @@ public class ProductImpl implements ProductService {
 
     @Override
     public Product getById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Insert new product"));
     }
 
     @Override
