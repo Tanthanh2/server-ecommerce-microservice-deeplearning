@@ -2,6 +2,8 @@ package com.example.productservice.controller;
 
 import com.example.productservice.Entity.Product;
 import com.example.productservice.Reponse.*;
+import com.example.productservice.Reponse.Order.OrderData;
+import com.example.productservice.Reponse.Order.OrderDataRequest;
 import com.example.productservice.Reponse.ReponseOrder.ReponseOrderData;
 import com.example.productservice.Service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +93,19 @@ public class ProductController {
     public ResponseEntity<List<Product_Promotion_SizeQuantityy_GET>> getOrderDetails(@RequestBody ReponseOrderData reponseOrderData) {
         List<Product_Promotion_SizeQuantityy_GET> orderDetails = productService.getOderDetails(reponseOrderData);
         return ResponseEntity.ok(orderDetails);
+    }
+
+
+    @PostMapping("/orders")
+    public ResponseEntity<?> createOrder(@RequestBody List<OrderDataRequest> orderDataRequests) {
+        // Validate input (optional)
+        if (orderDataRequests == null || orderDataRequests.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        // Call service to process the order data
+        List<OrderData> orderDataList = productService.listOrderData(orderDataRequests);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderDataList);
     }
 
 }

@@ -20,12 +20,13 @@ public class Order {
     private Long id;
     private Long customerId;
     private Long shopId;
-    @Column(nullable = false, updatable = false)
-    private Date orderDate;
     private double totalMoney;
-    private String status; // Trạng thái hiện tại của đơn hàng (ví dụ: pending, paid, shipped, delivered, cancelled)
+    private String status;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;
+
+
 
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @JsonIgnore
@@ -35,6 +36,11 @@ public class Order {
     @JsonIgnore
     private Shipping shipping;
 
+
+
+
+    @Column(nullable = false, updatable = false)
+    private Date orderDate;
     @PrePersist
     protected void onCreate() {
         this.orderDate = new Date(); // Set the order date to the current date and time

@@ -15,4 +15,5 @@ public class ConfigBean {
         return modelMapper;
     }
 
+
 }

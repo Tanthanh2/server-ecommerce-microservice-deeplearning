@@ -8,6 +8,9 @@ import com.example.productservice.Product.ProductRequest;
 import com.example.productservice.Product.SizeQuantityRequest;
 import com.example.productservice.Entity.Category;
 import com.example.productservice.Entity.Product;
+import com.example.productservice.Reponse.Order.OrderData;
+import com.example.productservice.Reponse.Order.OrderDataRequest;
+import com.example.productservice.Reponse.Order.PromotionData;
 import com.example.productservice.Reponse.Product_Promotion_SizeQuantityy_GET;
 import com.example.productservice.Reponse.PromotionRequest;
 import com.example.productservice.Reponse.ReponseOrder.ReponseOrder;
@@ -230,6 +233,43 @@ public class ProductImpl implements ProductService {
                     order.getProductId(),order.getIdSizeQuantity(),order.getPromotionId(),order.getQuantity()
             );
             list.add(productPromotionSizeQuantityyGet);
+        }
+        return list;
+    }
+
+    @Override
+    public List<OrderData> listOrderData(List<OrderDataRequest> orderDataRequests) {
+        List<OrderData> list = new ArrayList<>();
+
+        for (OrderDataRequest o : orderDataRequests) {
+            // Fetch product by productId
+            Product product = this.getById(o.getProductId());
+
+            // Initialize promotion variable
+            Promotion promotion = null;
+
+            // Check if promotionId is not null before querying the repository
+            if (o.getPromotionId() != null) {
+                Optional<Promotion> promotionOptional = promotionRepository.findById(o.getPromotionId());
+                if (promotionOptional.isPresent()) {
+                    promotion = promotionOptional.get();
+                }
+            }
+
+            // Map promotion to PromotionData if it exists
+            PromotionData promotionRequest = promotion != null ? modelMapper.map(promotion, PromotionData.class) : null;
+
+            // Create OrderData object and use default values for null fields
+            OrderData orderData = new OrderData(
+                    o.getId(),
+                    product,
+                    o.getIdSizeQuantity() != null ? o.getIdSizeQuantity() : 0, // Use a default value if null
+                    promotionRequest,
+                    o.getQuantity() != null ? o.getQuantity() : 0, // Use a default value if null
+                    o.getNote() != null ? o.getNote() : "" // Use an empty string if null
+            );
+
+            list.add(orderData);
         }
         return list;
     }

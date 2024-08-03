@@ -16,8 +16,9 @@ public class OrderItem {
     private Long id;
     private Long productId;
     private Long idSizeQuantity; // cho phép null nếu là các sản phẩm k có size
-    private Long promotionId;
-    private int quantity;
+    private Long promotionId; // cho phép null nếu là các sản phẩm k có promotion
+    private int quantity; // số lượng sản phẩm
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)

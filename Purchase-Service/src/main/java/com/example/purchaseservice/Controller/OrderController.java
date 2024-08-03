@@ -21,15 +21,21 @@ public class OrderController {
     @PostMapping("/")
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
         Order createdOrder = orderService.createOrder(orderRequest);
-        return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
+        if(createdOrder != null){
+            return new ResponseEntity<>("Success", HttpStatus.CREATED);
+
+        }else {
+            return new ResponseEntity<>("Not Success", HttpStatus.CREATED);
+
+        }
     }
 
     // update status
     @PutMapping("/{id}/status")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestParam String status) {
+    public ResponseEntity<?> updateOrderStatus(@PathVariable Long id, @RequestParam String status) {
         try {
             Order updatedOrder = orderService.updateOrderStatus(id, status);
-            return ResponseEntity.ok(updatedOrder);
+            return ResponseEntity.ok("OK");
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
@@ -43,15 +49,15 @@ public class OrderController {
 
     // get order BY customerId
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<Order>> getOrdersByCustomerId(@PathVariable Long customerId) {
-        List<Order> orders = orderService.getOrdersByCustomerId(customerId);
+    public ResponseEntity<List<Order>> getOrdersByCustomerId(@PathVariable Long customerId, @RequestParam String status) {
+        List<Order> orders = orderService.getOrdersByCustomerId(customerId, status);
         return ResponseEntity.ok(orders);
     }
 
     // get order By shopId
     @GetMapping("/shop/{shopId}")
-    public ResponseEntity<List<Order>> getOrdersByShopId(@PathVariable Long shopId) {
-        List<Order> orders = orderService.getOrdersByShopId(shopId);
+    public ResponseEntity<List<Order>> getOrdersByShopId(@PathVariable Long shopId, @RequestParam String status) {
+        List<Order> orders = orderService.getOrdersByShopId(shopId, status);
         return ResponseEntity.ok(orders);
     }
 
