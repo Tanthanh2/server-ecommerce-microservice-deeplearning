@@ -1,5 +1,6 @@
 package com.example.cartservice.controller;
 
+import com.example.cartservice.Dto.DeleteCount;
 import com.example.cartservice.Dto.SuccessResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class CartController {
     @GetMapping("/")
     public ResponseEntity<ResponseObject<List<Cart>>> findAll() {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject<>("ok", "Query All Success", cart.findAll())
+                new ResponseObject<>( "Query All Success", cart.findAll())
         );
     }
 
@@ -39,7 +40,17 @@ public class CartController {
     public ResponseEntity<ResponseObject<Cart>> addCart(@PathVariable("idCustomer") Long idCustomer,
                                                         @RequestBody @Valid CartItemDTO cartItemDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject<>("ok", "Success Add Cart", cart.addCart(idCustomer, cartItemDTO))
+                new ResponseObject<>( "Success Add Cart", cart.addCart(idCustomer, cartItemDTO))
+        );
+    }
+
+    @DeleteMapping
+    public ResponseEntity<ResponseObject<DeleteCount>> deleteCartItems(@RequestBody List<Long> ids) {
+        cart.deleteCartItemsByIds(ids);
+        int deletedCount = ids.size();
+        DeleteCount deleteCount = new DeleteCount(deletedCount);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject<>( "Xóa thành công",deleteCount)
         );
     }
 
@@ -47,7 +58,7 @@ public class CartController {
     public ResponseEntity<ResponseObject<Cart>> deleteCart(@PathVariable("idCart") Long idCart,
                                                         @PathVariable("idCartItem") Long idCartItem) {
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject<>("ok", "Success Delete Cart", cart.deleteCartItem(idCart, idCartItem))
+                new ResponseObject<>("Success Delete Cart", cart.deleteCartItem(idCart, idCartItem))
         );
     }
 

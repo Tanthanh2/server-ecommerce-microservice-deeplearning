@@ -23,14 +23,15 @@ public class ProductReponseCart_Order {
     private Long idShop;
     private double length;
     private double width;
-    private double hight;
+    private double height;
     private double weight;
     private CategoryRequest category;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String createdAt;
+    private String updatedAt;
     private double rating = 0;
     private int sold = 0;
     private int view = 0;
     private int orderNumber = 0;
+    private List<SizeQuantityReponseCart_Order> sizeQuantities;
     private boolean isPublic = true;
 }

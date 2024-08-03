@@ -29,7 +29,10 @@ public class SecurityConfiguration {
             "/api/v1/users/register",
             "/api/v1/users/authenticate",
             "/api/v1/users/refresh-token",
-            "/api/v1/users/logout"
+            "/api/v1/users/logout",
+            "/api/v1/products/category",
+            "/api/v1/products/search",
+            "/api/v1/products/search/**"
 
     };
 

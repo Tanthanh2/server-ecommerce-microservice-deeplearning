@@ -2,7 +2,7 @@ package com.example.cartservice.Service;
 
 import com.example.cartservice.Dto.CartData;
 import com.example.cartservice.Dto.CartItemDTO;
-import com.example.cartservice.Dto.Order_Cart.ProductWithSizeQuantityReponse;
+import com.example.cartservice.Dto.Order_Cart.ProductReponseCart_Order;
 import com.example.cartservice.Dto.SuccessResponse;
 import com.example.cartservice.Entity.Cart;
 import com.example.cartservice.Entity.CartItem;
@@ -53,6 +53,10 @@ public class CartImpl {
         return null;
     }
 
+    public void deleteCartItemsByIds(List<Long> ids) {
+        cartItemRepository.deleteAllById(ids);
+    }
+
     @Transactional
     public Cart addCart(Long idCustomer, CartItemDTO cartItemDTO) {
         // Kiểm tra xem người dùng đã có giỏ hàng hay không
@@ -74,11 +78,16 @@ public class CartImpl {
                 if (cartItem.getIdProduct().equals(cartItemDTO.getIdProduct())) {
                     check = true;
                     cartItem.setQuantity(cartItem.getQuantity() + cartItemDTO.getQuantity());
+
+                    // kiểm tra có đủ hàng trong kho
+
                 }
             }
         }
 
         if (check) {
+
+
             entityManager.persist(cart);
             return cart;
         }
@@ -86,6 +95,11 @@ public class CartImpl {
         CartItem cartItem = new CartItem();
         cartItem.setIdProduct(cartItemDTO.getIdProduct());
         cartItem.setQuantity(cartItemDTO.getQuantity());
+
+        // kiểm tra có đủ hàng trong kho
+
+
+
         if (cartItemDTO.getIdSizeQuantity() != null) {
             cartItem.setIdSizeQuantity(cartItemDTO.getIdSizeQuantity());
         }else {
@@ -98,6 +112,7 @@ public class CartImpl {
         // Lưu CartEntity và CartItemEntity vào cơ sở dữ liệu
         entityManager.persist(cart);
         entityManager.persist(cartItem);
+
 
         return cart;
     }
@@ -125,15 +140,19 @@ public class CartImpl {
         }
 
         cartReponseList = Flux.fromIterable(cart.getCartItems())
-                .flatMap(cartItem -> getProductResponse(cartItem.getIdProduct().toString(),cartItem.getIdSizeQuantity().toString(), token)
+                .flatMap(cartItem -> getProductResponse(cartItem.getIdProduct().toString(), token)
                         .map(productResponse -> {
                             CartData cartReponse = new CartData();
                             cartReponse.set_id(cartItem.getId().toString());
                             cartReponse.setBuy_count(cartItem.getQuantity());
+                            cartReponse.setPrice(productResponse.getPrice());
+                            cartReponse.setPrice_before_discount(productResponse.getPriceBeforeDiscount());
                             cartReponse.setStatus(-1);
                             cartReponse.setUser(cart.getIdCustomer().toString());
-                            cartReponse.setProduct(productResponse.getProduct());
-                            cartReponse.setSizeQuantity(productResponse.getSizeQuantity());
+                            cartReponse.setId_size_quantity_color(cartItem.getIdSizeQuantity());
+                            cartReponse.setCreatedAt("20/12/2023");
+                            cartReponse.setUpdatedAt("20/12/2024");
+                            cartReponse.setProduct(productResponse);
                             return cartReponse;
                         }))
                 .collectList()
@@ -143,12 +162,12 @@ public class CartImpl {
         return  successResponse;
     }
 
-    private Mono<ProductWithSizeQuantityReponse> getProductResponse(String productId, String idSizeQuantity, String token) {
+    private Mono<ProductReponseCart_Order> getProductResponse(String productId, String token) {
         return webClient.get()
-                .uri("http://localhost:8222/api/v1/products/"+productId+"/size/" + idSizeQuantity)
+                .uri("http://localhost:8222/api/v1/products/"+productId+"/size/" + "0")
                 .headers(headers -> headers.setBearerAuth(token.substring(7)))
                 .retrieve()
-                .bodyToMono(ProductWithSizeQuantityReponse.class);
+                .bodyToMono(ProductReponseCart_Order.class);
     }
 
 

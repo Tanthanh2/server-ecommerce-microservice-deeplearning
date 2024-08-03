@@ -8,15 +8,13 @@ import com.example.productservice.Product.ProductRequest;
 import com.example.productservice.Product.SizeQuantityRequest;
 import com.example.productservice.Entity.Category;
 import com.example.productservice.Entity.Product;
-import com.example.productservice.Reponse.ProductReponse;
-import com.example.productservice.Reponse.ProductWithSizeQuantityReponse;
 import com.example.productservice.Reponse.Product_Promotion_SizeQuantityy_GET;
 import com.example.productservice.Reponse.PromotionRequest;
 import com.example.productservice.Reponse.ReponseOrder.ReponseOrder;
 import com.example.productservice.Reponse.ReponseOrder.ReponseOrderData;
 import com.example.productservice.Repository.*;
 import com.example.productservice.Service.ProductService;
-import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -90,18 +88,24 @@ public class ProductImpl implements ProductService {
     @Override
     public Product updateProductSell(Long id, ProductRequest productRequest) {
         Optional<Product> product = productRepository.findById(id);
+
         if(product.isPresent()){
             Product product1 = product.get();
             product1.setPrice(productRequest.getPrice());
             if(productRequest.getSizeQuantities() == null || productRequest.getSizeQuantities().size() == 0){
                 product1.setQuantity(productRequest.getQuantity());
+                product1.setSizeQuantities(new ArrayList<>());
                 return productRepository.save(product1);
 
             }else {
 // Remove sizeQuantities not in the request
                 product1.setQuantity(productRequest.getQuantity());
 
+                // Find size quantities to be removed
+                List<SizeQuantity> toRemove = new ArrayList<>();
+
                 List<SizeQuantity> currentSizeQuantities = product1.getSizeQuantities();
+
                 currentSizeQuantities.removeIf(sizeQuantity ->
                         productRequest.getSizeQuantities().stream().noneMatch(req -> req.getId() != null && req.getId().equals(sizeQuantity.getId())));
 
@@ -135,12 +139,6 @@ public class ProductImpl implements ProductService {
         }
     }
 
-    @Override
-    public void deleteSizeQuantityById(Long id) {
-        sizeQuantityRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("SizeQuantity not found with id: " + id));
-        sizeQuantityRepository.deleteById(id);
-    }
 
     @Override
     public Product updateProductShip(Long id, ProductRequest productRequest) {
@@ -180,23 +178,9 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
-    public ProductWithSizeQuantityReponse findProductWithSize(Long idProduct, Long idSizeQuantity) {
-        ProductWithSizeQuantityReponse product = new ProductWithSizeQuantityReponse();
-
+    public Product findProductWithSize(Long idProduct, Long idSizeQuantity) {
         Product product1 = this.getById(idProduct);
-        SizeQuantity sizeQuantity = this.findByIdSizeQuantity(idSizeQuantity);
-        if (product1 == null) {
-            return null; // Handle not found case
-        }
-
-        ProductReponseCart_Order productResponse = modelMapper.map(product1, ProductReponseCart_Order.class);
-        SizeQuantityReponseCart_Order sizeQuantityResponse = sizeQuantity != null ? modelMapper.map(sizeQuantity, SizeQuantityReponseCart_Order.class) : null;
-
-
-        return ProductWithSizeQuantityReponse.builder()
-                .product(productResponse)
-                .sizeQuantity(sizeQuantityResponse)
-                .build();
+        return product1;
     }
 
     @Override
@@ -261,6 +245,31 @@ public class ProductImpl implements ProductService {
             throw new RuntimeException("Product not found");
         }
     }
+
+    @Transactional
+    @Override
+    public void deleteSizeQuantityById(Long id) {
+        // Fetch the SizeQuantity entity by ID
+        SizeQuantity sizeQuantity = sizeQuantityRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("SizeQuantity not found with ID: " + id));
+
+        // Get the associated Product
+        Product product = sizeQuantity.getProduct();
+
+        // Update the Product's quantity
+        product.setQuantity(product.getQuantity() - sizeQuantity.getQuantity());
+
+        // Remove SizeQuantity from Product's sizeQuantities list
+        List<SizeQuantity> sizeQuantities = product.getSizeQuantities();
+        sizeQuantities.remove(sizeQuantity); // Use remove() directly on the list
+
+        // Save the updated Product
+        productRepository.save(product);
+
+        // Delete the SizeQuantity entity
+        sizeQuantityRepository.delete(sizeQuantity);
+    }
+
 
     @Override
     public void incrementProductView(Long id) {

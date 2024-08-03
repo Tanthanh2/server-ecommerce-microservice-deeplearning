@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/products")
 public class ProductController {
-
+    ///api/v1/products/search
     @GetMapping("/test")
     public String testApi() {
         return "products Service API is working!";
@@ -55,19 +55,19 @@ public class ProductController {
             @RequestParam(required = false) Long idcategory,
             @RequestParam(required = false) Double price_min,
             @RequestParam(required = false) Double price_max,
-            @RequestParam(required = false, defaultValue = "price") String sortBy,
+            @RequestParam(required = false, defaultValue = "price") String sort_by,
             @RequestParam(required = false, defaultValue = "asc") String order,
             @RequestParam(required = false) Integer rating_filter,
             @RequestParam(defaultValue = "0") int page, // Giá trị mặc định là trang 0
-            @RequestParam(defaultValue = "10") int size) { // Giá trị mặc định là kích thước trang 10
+            @RequestParam(defaultValue = "10") int limit) { // Giá trị mặc định là kích thước trang 10
 
-        Sort sort = Sort.by(Sort.Order.asc(sortBy));
+        Sort sort = Sort.by(Sort.Order.asc(sort_by));
         if ("desc".equalsIgnoreCase(order)) {
-            sort = Sort.by(Sort.Order.desc(sortBy));
+            sort = Sort.by(Sort.Order.desc(sort_by));
         }
 
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Product> products=  productService.findAllWithFiltersAndSorting(name, idcategory, price_min, price_max, sortBy, order, rating_filter, pageable);
+        Pageable pageable = PageRequest.of(page, limit, sort);
+        Page<Product> products=  productService.findAllWithFiltersAndSorting(name, idcategory, price_min, price_max, sort_by, order, rating_filter, pageable);
         List<Product> list = products.stream().toList();
         Pagination pagination = new Pagination(pageable.getPageNumber(),0, pageable.getPageSize());
         ProductData productData = new ProductData(list,pagination);
@@ -77,16 +77,14 @@ public class ProductController {
 
 
     @GetMapping("/{idProduct}/size/{idSizeQuantity}")
-    public ResponseEntity<ProductWithSizeQuantityReponse> getProductWithSizeQuantity(
+    public ResponseEntity<?> getProductWithSizeQuantity(
             @PathVariable Long idProduct,
             @PathVariable Long idSizeQuantity) {
 
-        ProductWithSizeQuantityReponse response = productService.findProductWithSize(idProduct, idSizeQuantity);
-
-        if (response.getProduct() == null) {
+        Product response = productService.findProductWithSize(idProduct, idSizeQuantity);
+        if (response == null) {
             return ResponseEntity.notFound().build();
         }
-
         return ResponseEntity.ok(response);
     }
     @PostMapping("/details")

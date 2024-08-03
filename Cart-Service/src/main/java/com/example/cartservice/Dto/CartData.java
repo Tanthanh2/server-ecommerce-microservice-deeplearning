@@ -14,10 +14,11 @@ public class CartData {
     private int buy_count;
     private double price;
     private double price_before_discount;
-    private int quantity;
     private int status;
     private String user;
-    private ProductReponseCart_Order product;
-    private SizeQuantityReponseCart_Order sizeQuantity;
+    private String createdAt;
+    private String updatedAt;
+    private Long id_size_quantity_color;
 
+    private ProductReponseCart_Order product;
 }

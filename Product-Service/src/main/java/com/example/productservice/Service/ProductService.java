@@ -3,7 +3,6 @@ package com.example.productservice.Service;
 import com.example.productservice.Entity.SizeQuantity;
 import com.example.productservice.Product.ProductRequest;
 import com.example.productservice.Entity.Product;
-import com.example.productservice.Reponse.ProductWithSizeQuantityReponse;
 import com.example.productservice.Reponse.Product_Promotion_SizeQuantityy_GET;
 import com.example.productservice.Reponse.ReponseOrder.ReponseOrderData;
 import org.springframework.data.domain.Page;
@@ -16,10 +15,10 @@ public interface ProductService {
     Product updateProductBasic(Long id, ProductRequest productRequest);
     Product updateProductDetail(Long id, ProductRequest productRequest);
     Product updateProductSell(Long id, ProductRequest productRequest);
-    public void deleteSizeQuantityById(Long id) ;
+
     Product updateProductShip(Long id, ProductRequest productRequest);
     void updateIsPublic(Long id, boolean isPublic);
-
+    public void deleteSizeQuantityById(Long id);
     public void incrementProductView(Long id);
     List<Product> getListByShopId(Long shopId);
     public SizeQuantity findByIdSizeQuantity(Long id);
@@ -34,7 +33,7 @@ public interface ProductService {
                                                Integer rating_filter,
                                                Pageable pageable);
 
-    ProductWithSizeQuantityReponse findProductWithSize(Long idProduct, Long idSizeQuantity);
+    Product findProductWithSize(Long idProduct, Long idSizeQuantity);
     Product_Promotion_SizeQuantityy_GET Product_Promotion_SizeQuantityy_GET_(Long idproduct, Long idSizeQuantity, Long idPromotion, int quantity);
     List<Product_Promotion_SizeQuantityy_GET> getOderDetails(ReponseOrderData reponseOrderData);
 
