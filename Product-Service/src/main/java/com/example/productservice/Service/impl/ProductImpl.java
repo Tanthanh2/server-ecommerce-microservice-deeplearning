@@ -10,6 +10,7 @@ import com.example.productservice.Entity.Category;
 import com.example.productservice.Entity.Product;
 import com.example.productservice.Reponse.Order.OrderData;
 import com.example.productservice.Reponse.Order.OrderDataRequest;
+import com.example.productservice.Reponse.Order.OrderItemRequest;
 import com.example.productservice.Reponse.Order.PromotionData;
 import com.example.productservice.Reponse.Product_Promotion_SizeQuantityy_GET;
 import com.example.productservice.Reponse.PromotionRequest;
@@ -17,6 +18,7 @@ import com.example.productservice.Reponse.ReponseOrder.ReponseOrder;
 import com.example.productservice.Reponse.ReponseOrder.ReponseOrderData;
 import com.example.productservice.Repository.*;
 import com.example.productservice.Service.ProductService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,6 +284,40 @@ public class ProductImpl implements ProductService {
         }
         return list;
     }
+
+    @Override
+    public Void HandleQuantityProduct(List<OrderItemRequest> orderItemRequests) {
+        if (orderItemRequests == null || orderItemRequests.isEmpty()) {
+            return null; // or throw an IllegalArgumentException
+        }
+
+        for (OrderItemRequest o : orderItemRequests) {
+            Product product = this.getById(o.getProductId());
+            if (o.getIdSizeQuantity() != null && o.getIdSizeQuantity() != 0) {
+                // Handle SizeQuantity
+                SizeQuantity sizeQuantity = sizeQuantityRepository.findById(o.getIdSizeQuantity())
+                        .orElseThrow(() -> new EntityNotFoundException("SizeQuantity not found"));
+
+                if (o.getId() == 0) {
+                    sizeQuantity.setQuantity(sizeQuantity.getQuantity() - o.getQuantity());
+                } else {
+                    sizeQuantity.setQuantity(sizeQuantity.getQuantity() + o.getQuantity());
+                }
+                sizeQuantityRepository.save(sizeQuantity);
+            }
+
+            if (o.getId() == 0) {
+                // Order is successful
+                product.setQuantity(product.getQuantity() - o.getQuantity());
+            } else {
+                // Order is not successful
+                product.setQuantity(product.getQuantity() + o.getQuantity());
+            }
+            productRepository.save(product);
+        }
+        return null;
+    }
+
 
     @Override
     public void updateIsPublic(Long id, boolean isPublic) {

@@ -8,6 +8,16 @@ eureka:
 server:
   port: 8082
 spring:
+
+  kafka:
+    bootstrap-servers: localhost:9092 # Địa chỉ của Kafka broker
+    consumer:
+      group-id: tpd-loggers1 # ID của group consumer
+      auto-offset-reset: earliest # Cách xử lý offset
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+
   application:
     name: Product-Service
   datasource:

@@ -1,8 +1,10 @@
 package com.example.purchaseservice.Controller;
 
 import com.example.purchaseservice.Entity.Order;
+import com.example.purchaseservice.Request.OrderItemRequest;
 import com.example.purchaseservice.Request.OrderRequest;
 import com.example.purchaseservice.Service.OrderService;
+import com.example.purchaseservice.Service.ProducerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,18 @@ import java.util.Optional;
 public class OrderController {
     @Autowired
     private OrderService orderService;
-
+    @Autowired
+    private ProducerService producerService;
 
     @PostMapping("/")
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
         Order createdOrder = orderService.createOrder(orderRequest);
         if(createdOrder != null){
+            List<OrderItemRequest> orderItems = orderRequest.getOrderItems();
+            for(OrderItemRequest o: orderItems){
+                o.setId(0l);
+            }
+            producerService.sendSuperHeroMessage(orderItems);
             return new ResponseEntity<>(createdOrder.getId().toString(), HttpStatus.CREATED);
         }else {
             return new ResponseEntity<>("Not Success", HttpStatus.CREATED);

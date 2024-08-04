@@ -5,8 +5,11 @@ import com.example.purchaseservice.Entity.OrderItem;
 
 
 import com.example.purchaseservice.Repository.OrderRepository;
+import com.example.purchaseservice.Request.OrderItemRequest;
 import com.example.purchaseservice.Request.OrderRequest;
 import com.example.purchaseservice.Service.OrderService;
+import com.example.purchaseservice.Service.ProducerService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,12 @@ public class OrderImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private ProducerService producerService;
 
     // Convert OrderRequest to Order entity
     private Order mapToOrder(OrderRequest orderRequest) {
@@ -58,11 +67,28 @@ public class OrderImpl implements OrderService {
         if (optionalOrder.isPresent()) {
             Order order = optionalOrder.get();
             order.setStatus(status);
+
+
+            if(status.equals("cancelled")){
+                List<OrderItem> orderItems = order.getOrderItems();
+                List<OrderItemRequest> orderItemRequests = orderItems.stream()
+                        .map(this::convertToOrderItemRequest)
+                        .collect(Collectors.toList());
+
+                for(OrderItemRequest o: orderItemRequests){
+                    o.setId(1l);
+                }
+                producerService.sendSuperHeroMessage(orderItemRequests);
+
+            }
             return orderRepository.save(order);
         }
+
         throw new RuntimeException("Order not found with id " + id);
     }
-
+    private OrderItemRequest convertToOrderItemRequest(OrderItem orderItem) {
+        return modelMapper.map(orderItem, OrderItemRequest.class);
+    }
     @Override
     public Optional<Order> getOrderById(Long id) {
         return orderRepository.findById(id);

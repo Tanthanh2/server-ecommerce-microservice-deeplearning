@@ -5,6 +5,7 @@ import com.example.productservice.Product.ProductRequest;
 import com.example.productservice.Entity.Product;
 import com.example.productservice.Reponse.Order.OrderData;
 import com.example.productservice.Reponse.Order.OrderDataRequest;
+import com.example.productservice.Reponse.Order.OrderItemRequest;
 import com.example.productservice.Reponse.Product_Promotion_SizeQuantityy_GET;
 import com.example.productservice.Reponse.ReponseOrder.ReponseOrderData;
 import org.springframework.data.domain.Page;
@@ -40,4 +41,6 @@ public interface ProductService {
     List<Product_Promotion_SizeQuantityy_GET> getOderDetails(ReponseOrderData reponseOrderData);
     void plusView(Long id);
     List<OrderData> listOrderData(List<OrderDataRequest> orderDataRequests);
+
+    Void HandleQuantityProduct(List<OrderItemRequest> orderItemRequests);
 }
