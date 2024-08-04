@@ -22,8 +22,7 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
         Order createdOrder = orderService.createOrder(orderRequest);
         if(createdOrder != null){
-            return new ResponseEntity<>("Success", HttpStatus.CREATED);
-
+            return new ResponseEntity<>(createdOrder.getId().toString(), HttpStatus.CREATED);
         }else {
             return new ResponseEntity<>("Not Success", HttpStatus.CREATED);
 

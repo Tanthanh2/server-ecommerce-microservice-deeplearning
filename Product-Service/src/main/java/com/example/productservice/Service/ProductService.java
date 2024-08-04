@@ -38,6 +38,6 @@ public interface ProductService {
     Product findProductWithSize(Long idProduct, Long idSizeQuantity);
     Product_Promotion_SizeQuantityy_GET Product_Promotion_SizeQuantityy_GET_(Long idproduct, Long idSizeQuantity, Long idPromotion, int quantity);
     List<Product_Promotion_SizeQuantityy_GET> getOderDetails(ReponseOrderData reponseOrderData);
-
+    void plusView(Long id);
     List<OrderData> listOrderData(List<OrderDataRequest> orderDataRequests);
 }

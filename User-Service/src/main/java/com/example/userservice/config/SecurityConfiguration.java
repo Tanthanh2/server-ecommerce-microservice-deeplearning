@@ -32,7 +32,9 @@ public class SecurityConfiguration {
             "/api/v1/users/logout",
             "/api/v1/products/category",
             "/api/v1/products/search",
-            "/api/v1/products/search/**"
+            "/api/v1/products/search/**",
+            "/api/v1/notifications/callback/"
+            ,"/api/v1/products/test"
 
     };
 

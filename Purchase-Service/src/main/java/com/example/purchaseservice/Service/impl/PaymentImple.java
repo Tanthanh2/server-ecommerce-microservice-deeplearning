@@ -31,7 +31,7 @@ public class PaymentImple implements PaymentService {
                 .paymentDate(new Date())
                 .status(paymentRequest.getStatus())
                 .method(paymentRequest.getMethod())
-                .amount(paymentRequest.getAmount())
+                .amount(p.getTotalMoney())
                 .build();
         return paymentRepository.save(payment);
     }

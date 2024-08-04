@@ -95,6 +95,11 @@ public class ProductController {
         return ResponseEntity.ok(orderDetails);
     }
 
+    @GetMapping("/plus-view/{id}")
+    public String plusView(@PathVariable Long id) {
+        productService.plusView(id);
+        return  "ok";
+    }
 
     @PostMapping("/orders")
     public ResponseEntity<?> createOrder(@RequestBody List<OrderDataRequest> orderDataRequests) {

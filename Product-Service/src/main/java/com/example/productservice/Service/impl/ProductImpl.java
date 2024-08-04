@@ -238,6 +238,15 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
+    public void plusView(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        product.ifPresent(p -> {
+            p.setView(p.getView() + 1);
+            productRepository.save(p);
+        });
+    }
+
+    @Override
     public List<OrderData> listOrderData(List<OrderDataRequest> orderDataRequests) {
         List<OrderData> list = new ArrayList<>();
 
