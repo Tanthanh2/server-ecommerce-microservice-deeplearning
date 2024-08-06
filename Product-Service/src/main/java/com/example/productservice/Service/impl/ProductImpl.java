@@ -286,36 +286,58 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
-    public Void HandleQuantityProduct(List<OrderItemRequest> orderItemRequests) {
-        if (orderItemRequests == null || orderItemRequests.isEmpty()) {
-            return null; // or throw an IllegalArgumentException
+    public String HandleQuantityProductAdd(String o) {
+        String[] list = o.split("_");
+        for (String data: list){
+            String[] dataTemp = data.split("-");
+            Long idProduct = Long.parseLong(dataTemp[0]);
+            int quantity = Integer.parseInt(dataTemp[1]);
+            Long idSizeQuantity = Long.parseLong(dataTemp[2]);
+            handleDataQuantityAddOrder(idProduct,quantity,idSizeQuantity);
+        }
+        return "ok";
+    }
+
+    @Override
+    public String HandleQuantityProductSub(String o) {
+        String[] list = o.split("_");
+        for (String data: list){
+            String[] dataTemp = data.split("-");
+            Long idProduct = Long.parseLong(dataTemp[0]);
+            int quantity = Integer.parseInt(dataTemp[1]);
+            Long idSizeQuantity = Long.parseLong(dataTemp[2]);
+            handleDataQuantityCancelOrder(idProduct,quantity,idSizeQuantity);
+        }
+        return "ok";
+    }
+
+    private void handleDataQuantityAddOrder(Long idProduct, int quantity, Long idSizeQuantity){
+
+        Product product = this.getById(idProduct);
+        product.setQuantity(product.getQuantity() - quantity);
+        if (idSizeQuantity != null && idSizeQuantity != 0) {
+            SizeQuantity sizeQuantity = sizeQuantityRepository.findById(idSizeQuantity)
+                    .orElseThrow(() -> new EntityNotFoundException("SizeQuantity not found"));
+            sizeQuantity.setQuantity(sizeQuantity.getQuantity() - quantity);
+            sizeQuantityRepository.save(sizeQuantity);
         }
 
-        for (OrderItemRequest o : orderItemRequests) {
-            Product product = this.getById(o.getProductId());
-            if (o.getIdSizeQuantity() != null && o.getIdSizeQuantity() != 0) {
-                // Handle SizeQuantity
-                SizeQuantity sizeQuantity = sizeQuantityRepository.findById(o.getIdSizeQuantity())
-                        .orElseThrow(() -> new EntityNotFoundException("SizeQuantity not found"));
+        productRepository.save(product);
+    }
 
-                if (o.getId() == 0) {
-                    sizeQuantity.setQuantity(sizeQuantity.getQuantity() - o.getQuantity());
-                } else {
-                    sizeQuantity.setQuantity(sizeQuantity.getQuantity() + o.getQuantity());
-                }
-                sizeQuantityRepository.save(sizeQuantity);
-            }
 
-            if (o.getId() == 0) {
-                // Order is successful
-                product.setQuantity(product.getQuantity() - o.getQuantity());
-            } else {
-                // Order is not successful
-                product.setQuantity(product.getQuantity() + o.getQuantity());
-            }
-            productRepository.save(product);
+    private void handleDataQuantityCancelOrder(Long idProduct, int quantity, Long idSizeQuantity){
+        Product product = this.getById(idProduct);
+        product.setQuantity(product.getQuantity() + quantity);
+
+        if (idSizeQuantity != null && idSizeQuantity != 0) {
+            SizeQuantity sizeQuantity = sizeQuantityRepository.findById(idSizeQuantity)
+                    .orElseThrow(() -> new EntityNotFoundException("SizeQuantity not found"));
+            sizeQuantity.setQuantity(sizeQuantity.getQuantity() + quantity);
+            sizeQuantityRepository.save(sizeQuantity);
         }
-        return null;
+
+        productRepository.save(product);
     }
 
 

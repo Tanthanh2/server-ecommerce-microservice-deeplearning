@@ -1,6 +1,7 @@
 package com.example.purchaseservice.Controller;
 
 import com.example.purchaseservice.Entity.Order;
+import com.example.purchaseservice.Entity.OrderItem;
 import com.example.purchaseservice.Request.OrderItemRequest;
 import com.example.purchaseservice.Request.OrderRequest;
 import com.example.purchaseservice.Service.OrderService;
@@ -25,11 +26,38 @@ public class OrderController {
     public ResponseEntity<?> createOrder(@RequestBody OrderRequest orderRequest) {
         Order createdOrder = orderService.createOrder(orderRequest);
         if(createdOrder != null){
-            List<OrderItemRequest> orderItems = orderRequest.getOrderItems();
-            for(OrderItemRequest o: orderItems){
-                o.setId(0l);
+            List<OrderItem> orderItems = createdOrder.getOrderItems();
+            StringBuilder dataBuilder = new StringBuilder();
+
+            for (OrderItem o : orderItems) {
+                // Construct the format: productId-quantity-idSizeQuantity
+                String itemData = o.getProductId() + "-" + o.getQuantity();
+
+                // Include idSizeQuantity if it's not null
+                if (o.getIdSizeQuantity() != null) {
+                    itemData += "-" + o.getIdSizeQuantity();
+                }else {
+                    itemData += "-" + "0";
+                }
+
+                // Append the constructed item data to the main string
+                dataBuilder.append(itemData).append("_");
             }
-            producerService.sendSuperHeroMessage(orderItems);
+
+// Remove the last underscore if there are any items
+            if (dataBuilder.length() > 0) {
+                dataBuilder.setLength(dataBuilder.length() - 1);
+            }
+
+// Convert StringBuilder to String
+            String data = dataBuilder.toString();
+
+// Output or return the constructed string
+            System.out.println(data);
+
+            producerService.sendMessage(data);
+
+
             return new ResponseEntity<>(createdOrder.getId().toString(), HttpStatus.CREATED);
         }else {
             return new ResponseEntity<>("Not Success", HttpStatus.CREATED);

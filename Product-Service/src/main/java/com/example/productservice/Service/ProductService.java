@@ -42,5 +42,6 @@ public interface ProductService {
     void plusView(Long id);
     List<OrderData> listOrderData(List<OrderDataRequest> orderDataRequests);
 
-    Void HandleQuantityProduct(List<OrderItemRequest> orderItemRequests);
+    String HandleQuantityProductAdd(String o);
+    String HandleQuantityProductSub(String o);
 }

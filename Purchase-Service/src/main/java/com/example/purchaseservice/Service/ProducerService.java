@@ -16,14 +16,18 @@ import org.slf4j.LoggerFactory;
 public class ProducerService {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final String TOPIC = "updatequantityproduct";
-
+    private static final String TOPIC1 = "updatequantityproduct1";
     @Autowired
-    private KafkaTemplate<String, List<OrderItemRequest>> kafkaTemplateSuperHero;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
-    public void sendSuperHeroMessage(List<OrderItemRequest> superHero) {
-        logger.info("#### -> Publishing SuperHero :: {}", superHero);
-        kafkaTemplateSuperHero.send(TOPIC, superHero);
+    public void sendMessage(String message) {
+        logger.info("#### -> Publishing message -> {}", message);
+        kafkaTemplate.send(TOPIC, message);
     }
 
+    public void sendMessage1(String message) {
+        logger.info("#### -> Publishing message -> {}", message);
+        kafkaTemplate.send(TOPIC1, message);
+    }
 
 }

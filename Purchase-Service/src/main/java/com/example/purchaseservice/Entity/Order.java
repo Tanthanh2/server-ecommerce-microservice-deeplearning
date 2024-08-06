@@ -32,12 +32,6 @@ public class Order {
     @JsonIgnore
     private Payment payment;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    @JsonIgnore
-    private Shipping shipping;
-
-
-
 
     @Column(nullable = false, updatable = false)
     private Date orderDate;

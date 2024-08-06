@@ -18,7 +18,7 @@ export interface MomoConfig {
     orderInfo: 'pay with MoMo',
     partnerCode: 'MOMO',
     redirectUrl: 'http://localhost:3000/user/purchase',
-    ipnUrl: 'https://76d3-2001-ee1-df0b-c3d0-a09a-1941-d599-8826.ngrok-free.app/api/v1/notifications/callback/',
+    ipnUrl: 'https://dd48-2001-ee1-df0b-c3d0-ccbf-660f-e8eb-b65f.ngrok-free.app/api/v1/notifications/callback/',
     requestType: 'payWithMethod',
     extraData: '',
     orderGroupId: '',

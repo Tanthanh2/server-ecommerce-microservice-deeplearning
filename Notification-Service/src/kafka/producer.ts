@@ -13,7 +13,7 @@ export const sendUpdateStatus = async (idOrder: string) => {
   try {
     await producer.send({
       topic: "updatestatus",
-      messages: [{ value: JSON.stringify({ idOrder }) }],
+      messages: [{ value: idOrder }],
     });
     console.log(`Update status message sent for order ID: ${idOrder}`);
   } catch (error) {
@@ -27,7 +27,7 @@ export const sendCreatePayment = async (id: string) => {
   try {
     await producer.send({
       topic: "createpayment",
-      messages: [{ value: JSON.stringify({ id }) }],
+      messages: [{ value: id }],
     });
     console.log(`Create payment message sent for ID: ${id}`);
   } catch (error) {
