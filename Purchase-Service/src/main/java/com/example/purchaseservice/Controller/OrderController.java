@@ -95,6 +95,9 @@ public class OrderController {
         List<Order> orders = orderService.getOrdersByShopId(shopId, status);
         return ResponseEntity.ok(orders);
     }
-
+    @GetMapping("/status/{status}")
+    public List<Order> getOrdersByStatus(@PathVariable String status) {
+        return orderService.getOrdersByStatus(status);
+    }
 
 }

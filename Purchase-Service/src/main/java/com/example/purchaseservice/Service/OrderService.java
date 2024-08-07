@@ -13,5 +13,5 @@ public interface OrderService {
     Optional<Order> getOrderById(Long id);
     public List<Order> getOrdersByCustomerId(Long customerId, String status);
     public List<Order> getOrdersByShopId(Long shopId, String status);
-
+    public List<Order> getOrdersByStatus(String status);
 }

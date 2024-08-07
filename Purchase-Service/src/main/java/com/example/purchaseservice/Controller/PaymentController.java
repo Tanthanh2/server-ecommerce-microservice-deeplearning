@@ -36,7 +36,7 @@ public class PaymentController {
     @GetMapping("/order/{orderId}")
     public ResponseEntity<Payment> getPaymentByOrderId(@PathVariable Long orderId) {
         Optional<Payment> payment = paymentService.getPaymentByOrderId(orderId);
-        return payment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return payment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.ok().build());
     }
 
     @PutMapping("/{id}/status")

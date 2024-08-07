@@ -27,7 +27,6 @@ public class Order {
     private List<OrderItem> orderItems;
 
 
-
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     @JsonIgnore
     private Payment payment;

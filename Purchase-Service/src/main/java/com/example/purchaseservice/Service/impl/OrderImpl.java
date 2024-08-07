@@ -127,6 +127,10 @@ public class OrderImpl implements OrderService {
         return orderRepository.findByShopIdAndStatus(shopId, status);
     }
 
+    @Override
+    public List<Order> getOrdersByStatus(String status) {
+        return orderRepository.findByStatus(status);
+    }
 
 
 }

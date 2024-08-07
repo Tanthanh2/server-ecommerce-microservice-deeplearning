@@ -1,5 +1,6 @@
 package com.example.purchaseservice.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class Payment {
     private Long id;
     @OneToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore 
     private Order order;
     private Date paymentDate;
     private String status;

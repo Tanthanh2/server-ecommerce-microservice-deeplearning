@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/users/shop")
 public class ShopController {
@@ -19,6 +21,11 @@ public class ShopController {
     public ResponseEntity<Shop> registerShop(@RequestBody ShopDTO shopDTO) {
         Shop shop = shopService.registerShop(shopDTO);
         return new ResponseEntity<>(shop, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Shop>> getListShop(@RequestParam String district) {
+        return new ResponseEntity<>(shopService.getListShopByDistrict(district), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
