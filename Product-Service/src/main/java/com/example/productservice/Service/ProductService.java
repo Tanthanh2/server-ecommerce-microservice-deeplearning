@@ -27,7 +27,7 @@ public interface ProductService {
     public SizeQuantity findByIdSizeQuantity(Long id);
     Product getById(Long id);
 
-    Page<Product> findAllWithFiltersAndSorting(String name,
+    Page<Product> findAllWithFiltersAndSorting(String deeplearning,String name,
                                                Long idcategory,
                                                Double price_min,
                                                Double price_max,

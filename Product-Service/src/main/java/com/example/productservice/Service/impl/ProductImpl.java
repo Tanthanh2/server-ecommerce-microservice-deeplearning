@@ -23,12 +23,12 @@ import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -177,9 +177,42 @@ public class ProductImpl implements ProductService {
         return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Insert new product"));
     }
 
+    private List<Product> findProductsByIds(List<String> ids) {
+        List<Long> idLongs = ids.stream()
+                .map(Long::valueOf)
+                .collect(Collectors.toList());
+        return productRepository.findAllById(idLongs);
+    }
+
     @Override
-    public Page<Product> findAllWithFiltersAndSorting(String name, Long idcategory, Double price_min, Double price_max, String sortBy, String order, Integer rating_filter, Pageable pageable) {
-        return productRepository.findAllWithFiltersAndSorting(name, idcategory, price_min, price_max, sortBy, order, rating_filter, pageable);
+    public Page<Product> findAllWithFiltersAndSorting(String deeplearning,String name, Long idcategory, Double price_min, Double price_max, String sortBy, String order, Integer rating_filter, Pageable pageable) {
+        if(deeplearning != null){
+            String[] listIds = deeplearning.split("_");
+            List<String> idsList = Arrays.asList(listIds);
+            List<Product> products = findProductsByIds(idsList);
+            // Tạo một Map để ánh xạ sản phẩm theo ID
+            Map<Long, Product> productMap = products.stream()
+                    .collect(Collectors.toMap(Product::getId, product -> product));
+            List<Product> products1 = new ArrayList<>();
+            for (String id : listIds) {
+                Long id1 = Long.parseLong(id);
+                Product product = productMap.get(id1);
+                if (product != null) {
+                    products1.add(product);
+                }
+            }
+
+            // Chia danh sách thành trang
+            int start = (int) pageable.getOffset();
+            int end = Math.min((start + pageable.getPageSize()), products1.size());
+            List<Product> productPage = products1.subList(start, end);
+
+            // Tạo Page<Product> từ danh sách sản phẩm và tổng số sản phẩm
+            return new PageImpl<>(productPage, pageable, products1.size());
+
+        }else {
+            return productRepository.findAllWithFiltersAndSorting(name, idcategory, price_min, price_max, sortBy, order, rating_filter, pageable);
+        }
     }
 
     @Override

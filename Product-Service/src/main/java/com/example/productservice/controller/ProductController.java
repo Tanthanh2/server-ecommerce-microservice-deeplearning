@@ -54,12 +54,13 @@ public class ProductController {
     @GetMapping("/search")
     public ResponseEntity<?>  searchProducts(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) Long idcategory,
+            @RequestParam(required = false) Long category,
             @RequestParam(required = false) Double price_min,
             @RequestParam(required = false) Double price_max,
             @RequestParam(required = false, defaultValue = "price") String sort_by,
             @RequestParam(required = false, defaultValue = "asc") String order,
             @RequestParam(required = false) Integer rating_filter,
+            @RequestParam(required = false) String deeplearning,
             @RequestParam(defaultValue = "0") int page, // Giá trị mặc định là trang 0
             @RequestParam(defaultValue = "10") int limit) { // Giá trị mặc định là kích thước trang 10
 
@@ -69,7 +70,7 @@ public class ProductController {
         }
 
         Pageable pageable = PageRequest.of(page, limit, sort);
-        Page<Product> products=  productService.findAllWithFiltersAndSorting(name, idcategory, price_min, price_max, sort_by, order, rating_filter, pageable);
+        Page<Product> products=  productService.findAllWithFiltersAndSorting(deeplearning,name, category, price_min, price_max, sort_by, order, rating_filter, pageable);
         List<Product> list = products.stream().toList();
         Pagination pagination = new Pagination(pageable.getPageNumber(),0, pageable.getPageSize());
         ProductData productData = new ProductData(list,pagination);
