@@ -329,6 +329,7 @@ public class ProductImpl implements ProductService {
             handleDataQuantityAddOrder(idProduct,quantity,idSizeQuantity);
         }
         return "ok";
+
     }
 
     @Override

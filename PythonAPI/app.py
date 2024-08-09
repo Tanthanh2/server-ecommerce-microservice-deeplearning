@@ -2,19 +2,17 @@ from flask import Flask, request, jsonify
 from flaskext.mysql import MySQL
 from py_eureka_client import eureka_client
 from flask_cors import CORS
-import pickle
 import requests
 from io import BytesIO
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
 from tensorflow.keras.models import Model
 from PIL import Image
+import pandas as pd
 import numpy as np
-import math
-import matplotlib.pyplot as plt
-from tensorflow.keras.preprocessing.image import img_to_array
-import pickle
+# from tensorflow.keras.preprocessing.image import img_to_array
 import os
+import pymysql
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
     
 
@@ -67,9 +65,97 @@ def extract_vector(model, image_path):
         print(f"Không thể xử lý ảnh {image_path}: {e}")
         return None
 
+# Hàm kết nối đến cơ sở dữ liệu
+def connect_db(user, password, db, host='localhost'):
+    return pymysql.connect(user=user,
+                           password=password,
+                           database=db,
+                           host=host,
+                           cursorclass=pymysql.cursors.DictCursor)
+
 @app.route('/api/v1/aggreations/')
 def hello_world():
-    return 'Hello, World!'
+    # Kết nối đến cơ sở dữ liệu 1 và truy vấn bảng 'product'
+    conn1 = connect_db('root', 'Abc@123456789', 'productdb')
+    cursor1 = conn1.cursor()
+    
+    query1 = "SELECT id FROM product"
+    cursor1.execute(query1)
+    product_data = cursor1.fetchall()
+
+    query1_1 = "select DISTINCT product.id as product_id, product_review.id_customer, product_review.rating from product join product_review on product.id = product_review.product_id"
+    cursor1.execute(query1_1)
+    product_data_review = cursor1.fetchall()
+
+
+    cursor1.close()
+    conn1.close()
+
+    # Kết nối đến cơ sở dữ liệu 2 và truy vấn bảng 'order'
+    conn2 = connect_db('root', 'Abc@123456789', 'purchasedb')
+    cursor2 = conn2.cursor()
+    
+    query2 = "SELECT DISTINCT orders.customer_id, order_item.product_id FROM orders JOIN order_item ON orders.id = order_item.order_id"
+    cursor2.execute(query2)
+    order_data = cursor2.fetchall()
+    cursor2.close()
+    conn2.close()
+
+    # Kết nối đến cơ sở dữ liệu 3 và truy vấn bảng 'user'
+    conn3 = connect_db('root', 'Abc@123456789', 'userdb')
+    cursor3 = conn3.cursor()
+    
+    query3 = "SELECT id FROM user"
+    cursor3.execute(query3)
+    user_data = cursor3.fetchall()
+    cursor3.close()
+    conn3.close()
+
+    df_orders = pd.DataFrame(order_data)
+    df_reviews = pd.DataFrame(product_data_review)
+    df_products = pd.DataFrame(product_data)
+    df_users = pd.DataFrame(user_data)
+
+    # Initialize the matrix with NaN values, with products as index (rows) and users as columns
+    user_product_matrix = pd.DataFrame(np.nan, index=df_products['id'], columns=df_users['id'])
+    user_product_matrix.index.name = 'Product_ID'  # Tên hàng
+    user_product_matrix.columns.name = 'User_ID'    # Tên cột
+    # Populate the matrix with ratings
+    for _, review in df_reviews.iterrows():
+        user_product_matrix.loc[review['product_id'], review['id_customer']] = review['rating']
+
+    # Fill in the matrix based on purchase data
+    for _, order in df_orders.iterrows():
+        if pd.isna(user_product_matrix.loc[order['product_id'], order['customer_id']]):
+            user_product_matrix.loc[order['product_id'], order['customer_id']] = 4  # Default rating for purchases
+
+    # Fill in the matrix for non-purchases
+    user_product_matrix = user_product_matrix.fillna(0)
+    # Trả về dữ liệu từ cả ba cơ sở dữ liệu
+    return jsonify(user_product_matrix.to_dict())
+
+def get_ratingproduct(product_id):
+    # Kết nối đến cơ sở dữ liệu 1 và truy vấn bảng 'product'
+    conn1 = connect_db('root', 'Abc@123456789', 'productdb')
+    cursor1 = conn1.cursor()
+
+    try:
+        # Truy vấn để lấy rating của sản phẩm
+        query1 = "SELECT rating FROM product WHERE id = %s"
+        cursor1.execute(query1, (product_id,))  # Sử dụng tuple để bảo mật SQL Injection
+
+        # Lấy kết quả
+        result = cursor1.fetchone()  # Lấy một dòng kết quả
+        
+        if result is not None:
+            return result[0]  # Trả về rating nếu có kết quả
+        else:
+            return None  # Trả về None nếu không tìm thấy sản phẩm
+    finally:
+        # Đóng kết nối
+        cursor1.close()
+        conn1.close()
+
 
 @app.route('/api/v1/aggreations/products', methods=['POST'])
 def get_products():

@@ -36,6 +36,7 @@ public class ProductReviewImpl implements ProductReviewService {
 
         // Create new ProductReview
         ProductReview review = ProductReview.builder()
+                .id(reviewRequest.getId())
                 .idCustomer(reviewRequest.getIdCustomer())
                 .rating(reviewRequest.getRating())
                 .comment(reviewRequest.getComment())

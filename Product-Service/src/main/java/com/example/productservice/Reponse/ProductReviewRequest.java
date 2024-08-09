@@ -6,7 +6,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 @Getter
-@Setter
+@Setter 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
